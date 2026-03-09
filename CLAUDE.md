@@ -11,6 +11,20 @@ npm start          # start the Express server at http://localhost:3000
 
 No build step, linter, or test runner is configured.
 
+## Git workflow
+
+After every meaningful change, commit and push to GitHub:
+
+```bash
+git add <files>
+git commit -m "Short, descriptive message explaining what changed and why"
+git push
+```
+
+- Commit after each logical unit of work (a new feature, a bug fix, a UI change) — don't batch unrelated changes together.
+- Write commit messages in the imperative mood: "Add X", "Fix Y", "Remove Z".
+- Never leave uncommitted changes at the end of a session.
+
 ## Architecture
 
 This is a two-file project:
