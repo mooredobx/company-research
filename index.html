@@ -416,12 +416,56 @@
     .btn-export:hover { background: #f3f4f6; border-color: #d1d5db; }
     .btn-export:disabled { opacity: 0.5; cursor: not-allowed; }
 
+    /* ── Financials view ─────────────────────── */
+    #financials-view { max-width: 860px; }
+
+    .fin-kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+    .fin-kpi-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 22px 20px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+    }
+    .fin-kpi-label {
+      font-size: 0.7rem; font-weight: 700; color: #9ca3af;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      margin-bottom: 10px;
+    }
+    .fin-kpi-value {
+      font-size: 1.45rem; font-weight: 800; color: #1a1a2e;
+      line-height: 1.1; word-break: break-word;
+    }
+    .fin-kpi-sub { font-size: 0.73rem; color: #6b7280; margin-top: 6px; line-height: 1.4; }
+
+    .fin-section { width: 100%; margin-bottom: 20px; }
+    .fin-chart-card { padding: 28px 36px; }
+    #fin-chart-container { position: relative; height: 280px; }
+    #fin-chart-legend { display: flex; gap: 18px; margin-bottom: 20px; }
+
+    .fin-narrative-card { padding: 32px 36px; }
+    .fin-narrative-card .prep-card-title { margin-bottom: 14px; }
+    .fin-narrative-text p { font-size: 0.93rem; line-height: 1.75; color: #374151; margin-bottom: 10px; }
+    .fin-narrative-text p:last-child { margin-bottom: 0; }
+
+    .fin-placeholder { text-align: center; padding: 60px 40px; }
+    .fin-placeholder h3 { font-size: 1.05rem; font-weight: 700; color: #d1d5db; margin-bottom: 8px; }
+    .fin-placeholder p { font-size: 0.88rem; color: #9ca3af; }
+
+    .fin-loading { display: flex; align-items: center; gap: 10px; font-size: 0.82rem; color: #6b7280; }
+
     @media (max-width: 640px) {
       #report-card { padding: 24px 20px; }
       #search-card { flex-direction: column; }
       #search-btn { width: 100%; }
       .form-grid-2, .form-grid-3 { grid-template-columns: 1fr; }
       .field.span-2 { grid-column: span 1; }
+      .fin-kpi-grid { grid-template-columns: 1fr 1fr; }
     }
   </style>
 </head>
@@ -446,6 +490,11 @@
     <button class="nav-btn" data-view="landscape">
       <i data-lucide="layers" style="width:20px;height:20px;"></i>
       <span class="tooltip">Landscape</span>
+    </button>
+
+    <button class="nav-btn" data-view="financials">
+      <i data-lucide="trending-up" style="width:20px;height:20px;"></i>
+      <span class="tooltip">Financials</span>
     </button>
 
     <div class="nav-spacer"></div>
@@ -790,6 +839,94 @@
 
     </div>
 
+    <!-- ── Financials view ─────────────────────── -->
+    <div class="view" id="financials-view">
+      <div class="page-header">
+        <h1>Financials</h1>
+        <p id="fin-company-label">Research a company first to view financial data</p>
+      </div>
+
+      <!-- Placeholder: no research yet -->
+      <div id="fin-no-data" class="card" style="width:100%;">
+        <div class="fin-placeholder">
+          <i data-lucide="trending-up" style="width:48px;height:48px;display:block;margin:0 auto 16px;opacity:0.2;"></i>
+          <h3>No company researched yet</h3>
+          <p>Go to Research and search for a company to load financial data here.</p>
+        </div>
+      </div>
+
+      <!-- KPI tiles -->
+      <div class="fin-kpi-grid" id="fin-kpi-grid" style="display:none;">
+        <div class="fin-kpi-card">
+          <div class="fin-kpi-label">Revenue</div>
+          <div class="fin-kpi-value" id="fin-revenue">—</div>
+          <div class="fin-kpi-sub" id="fin-revenue-sub"></div>
+        </div>
+        <div class="fin-kpi-card">
+          <div class="fin-kpi-label">Profit</div>
+          <div class="fin-kpi-value" id="fin-profit">—</div>
+          <div class="fin-kpi-sub" id="fin-profit-sub"></div>
+        </div>
+        <div class="fin-kpi-card">
+          <div class="fin-kpi-label">Valuation / Market Cap</div>
+          <div class="fin-kpi-value" id="fin-valuation">—</div>
+          <div class="fin-kpi-sub" id="fin-valuation-sub"></div>
+        </div>
+        <div class="fin-kpi-card">
+          <div class="fin-kpi-label">Employees</div>
+          <div class="fin-kpi-value" id="fin-employees">—</div>
+          <div class="fin-kpi-sub" id="fin-employees-sub"></div>
+        </div>
+      </div>
+
+      <!-- Revenue trend chart -->
+      <div class="fin-section" id="fin-chart-section" style="display:none;">
+        <div class="card fin-chart-card">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
+            <div>
+              <div style="font-size:1rem; font-weight:700; color:#1a1a2e;">Revenue Trend</div>
+              <div style="font-size:0.78rem; color:#9ca3af; margin-top:3px;" id="fin-chart-subtitle">2020–2024</div>
+            </div>
+            <div style="font-size:0.72rem; color:#9ca3af; font-style:italic;" id="fin-chart-note"></div>
+          </div>
+          <div id="fin-chart-legend" style="display:flex; gap:18px; margin-bottom:20px;">
+            <div class="legend-item">
+              <div class="legend-swatch" style="background:#4f46e5;"></div>Revenue
+            </div>
+            <div class="legend-item">
+              <div class="legend-swatch" style="background:#a5b4fc;"></div>Profit
+            </div>
+            <div class="legend-item">
+              <div class="legend-line-swatch" style="background:#f59e0b;"></div>Margin %
+            </div>
+          </div>
+          <div id="fin-chart-container">
+            <canvas id="fin-perf-chart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI financial narrative -->
+      <div class="fin-section" id="fin-narrative-section" style="display:none;">
+        <div class="card fin-narrative-card">
+          <div class="prep-card-header">
+            <div class="prep-card-title">Financial Summary</div>
+            <div id="fin-loading" class="fin-loading" style="display:none;">
+              <div class="spinner"></div> Extracting financial data…
+            </div>
+          </div>
+          <div id="fin-narrative-text" class="fin-narrative-text"></div>
+        </div>
+      </div>
+
+      <!-- Export -->
+      <div class="export-bar" id="fin-export-bar" style="max-width:860px; display:none;">
+        <button class="btn-export" id="export-fin-btn">
+          <i data-lucide="download" style="width:15px;height:15px;"></i> Export PDF
+        </button>
+      </div>
+    </div>
+
     <div class="view" id="settings-view">
       <div class="page-header">
         <h1>Settings</h1>
@@ -917,6 +1054,7 @@ Be factual and concise. If certain information is not publicly known or verifiab
         btn.classList.add("active");
         document.getElementById(`${target}-view`).classList.add("active");
         if (target === "meeting-prep") onMeetingPrepOpen();
+        if (target === "financials") onFinancialsOpen();
       });
     });
 
@@ -1336,6 +1474,285 @@ ${lastReportMarkdown}`;
         btn.textContent = "Generate";
       }
     });
+    // ── Financials ────────────────────────────────────────
+    let finChart = null;
+    let finData  = null;
+
+    async function onFinancialsOpen() {
+      const noData          = document.getElementById("fin-no-data");
+      const kpiGrid         = document.getElementById("fin-kpi-grid");
+      const chartSection    = document.getElementById("fin-chart-section");
+      const narrativeSection= document.getElementById("fin-narrative-section");
+      const exportBar       = document.getElementById("fin-export-bar");
+
+      if (!lastCompany || !lastReportMarkdown) {
+        noData.style.display          = "block";
+        kpiGrid.style.display         = "none";
+        chartSection.style.display    = "none";
+        narrativeSection.style.display= "none";
+        exportBar.style.display       = "none";
+        document.getElementById("fin-company-label").textContent = "Research a company first to view financial data";
+        lucide.createIcons();
+        return;
+      }
+
+      document.getElementById("fin-company-label").textContent = lastCompany;
+      noData.style.display           = "none";
+      kpiGrid.style.display          = "grid";
+      chartSection.style.display     = "block";
+      narrativeSection.style.display = "block";
+      exportBar.style.display        = "flex";
+
+      // Use cached data if company hasn't changed
+      if (finData && finData._company === lastCompany) {
+        applyFinData(finData);
+        return;
+      }
+
+      document.getElementById("fin-loading").style.display = "flex";
+      document.getElementById("fin-narrative-text").innerHTML = "";
+      resetFinKpis();
+
+      const apiKey = getApiKey();
+      if (!apiKey) {
+        document.getElementById("fin-loading").style.display = "none";
+        const p = document.createElement("p");
+        p.textContent = "Add your Anthropic API key in Settings to extract financial data.";
+        document.getElementById("fin-narrative-text").appendChild(p);
+        return;
+      }
+
+      const prompt = `Based on this company research report, extract structured financial data and return a JSON object with exactly these fields:
+{
+  "revenue": "Most recent annual revenue (e.g. £2.4bn). Use — if unknown.",
+  "revenue_note": "Year and context (e.g. FY2023, +12% YoY). Empty string if unknown.",
+  "profit": "Most recent profit figure (operating, EBITDA or net). Use — if unknown.",
+  "profit_note": "Profit type and year (e.g. Operating profit FY2023). Empty string if unknown.",
+  "valuation": "Market cap if listed, or estimated valuation if private. Use — if unknown.",
+  "valuation_note": "Listing status and date (e.g. LSE-listed, Dec 2023). Empty string if unknown.",
+  "employees": "Number of employees (e.g. 12,400). Use — if unknown.",
+  "employees_note": "Date or context. Empty string if unknown.",
+  "narrative": "A 2-3 paragraph financial overview covering revenue trends, profitability, key milestones, and outlook. Plain text only, no markdown.",
+  "chart_years": [2020, 2021, 2022, 2023, 2024],
+  "chart_revenue": [null, null, null, null, null],
+  "chart_profit": [null, null, null, null, null],
+  "chart_margin": [null, null, null, null, null],
+  "chart_unit": "£m",
+  "chart_note": "Source of chart figures (e.g. from annual reports)"
+}
+For chart arrays: fill in numeric values in £m where available from the report, null where not. Revenue CAGR or growth rates can be used to estimate missing years if actual figures are not given.
+Return ONLY valid JSON, no markdown fences, no extra text.
+
+Report:
+${lastReportMarkdown}`;
+
+      try {
+        const res = await fetch("https://api.anthropic.com/v1/messages", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-api-key": apiKey,
+            "anthropic-version": "2023-06-01",
+            "anthropic-dangerous-direct-browser-access": "true",
+          },
+          body: JSON.stringify({
+            model: "claude-sonnet-4-6",
+            max_tokens: 1200,
+            messages: [{ role: "user", content: prompt }],
+          }),
+        });
+
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const json = await res.json();
+        const text = (json.content?.[0]?.text || "")
+          .replace(/^```[a-z]*\n?/, "").replace(/\n?```$/, "").trim();
+        const data = JSON.parse(text);
+        data._company = lastCompany;
+        finData = data;
+        applyFinData(data);
+      } catch (err) {
+        const p = document.createElement("p");
+        p.textContent = `Could not extract financial data: ${err.message}`;
+        document.getElementById("fin-narrative-text").appendChild(p);
+      } finally {
+        document.getElementById("fin-loading").style.display = "none";
+        lucide.createIcons();
+      }
+    }
+
+    function resetFinKpis() {
+      ["fin-revenue", "fin-profit", "fin-valuation", "fin-employees"].forEach(id => {
+        document.getElementById(id).textContent = "—";
+      });
+      ["fin-revenue-sub", "fin-profit-sub", "fin-valuation-sub", "fin-employees-sub"].forEach(id => {
+        document.getElementById(id).textContent = "";
+      });
+    }
+
+    function applyFinData(data) {
+      const setText = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = val || "—";
+      };
+      setText("fin-revenue",      data.revenue);
+      setText("fin-revenue-sub",  data.revenue_note);
+      setText("fin-profit",       data.profit);
+      setText("fin-profit-sub",   data.profit_note);
+      setText("fin-valuation",    data.valuation);
+      setText("fin-valuation-sub",data.valuation_note);
+      setText("fin-employees",    data.employees);
+      setText("fin-employees-sub",data.employees_note);
+
+      // Narrative (safe: textContent per paragraph)
+      const narEl = document.getElementById("fin-narrative-text");
+      narEl.innerHTML = "";
+      if (data.narrative) {
+        data.narrative.split(/\n\n+/).filter(p => p.trim()).forEach(para => {
+          const p = document.createElement("p");
+          p.textContent = para.trim();
+          narEl.appendChild(p);
+        });
+      }
+
+      // Chart metadata
+      const unit = data.chart_unit || "£m";
+      document.getElementById("fin-chart-subtitle").textContent = `2020–2024 · figures in ${unit}`;
+      if (data.chart_note) document.getElementById("fin-chart-note").textContent = data.chart_note;
+
+      renderFinChart(data);
+      document.getElementById("fin-loading").style.display = "none";
+      lucide.createIcons();
+    }
+
+    function renderFinChart(data) {
+      const years   = data.chart_years   || [2020, 2021, 2022, 2023, 2024];
+      const revenue = data.chart_revenue || [];
+      const profit  = data.chart_profit  || [];
+      const margin  = data.chart_margin  || [];
+      const unit    = data.chart_unit    || "£m";
+
+      if (finChart) { finChart.destroy(); finChart = null; }
+
+      const ctx = document.getElementById("fin-perf-chart").getContext("2d");
+      finChart = new Chart(ctx, {
+        data: {
+          labels: years,
+          datasets: [
+            {
+              type: "bar", label: "Revenue", data: revenue,
+              backgroundColor: "rgba(79,70,229,0.80)",
+              borderRadius: 5, borderSkipped: false,
+              yAxisID: "yLeft", order: 2,
+            },
+            {
+              type: "bar", label: "Profit", data: profit,
+              backgroundColor: "rgba(165,180,252,0.75)",
+              borderRadius: 5, borderSkipped: false,
+              yAxisID: "yLeft", order: 3,
+            },
+            {
+              type: "line", label: "Margin %", data: margin,
+              borderColor: "#f59e0b", backgroundColor: "rgba(245,158,11,0.08)",
+              borderWidth: 2.5, tension: 0.4, fill: false,
+              pointBackgroundColor: "#f59e0b", pointBorderColor: "#fff",
+              pointBorderWidth: 2, pointRadius: 5, pointHoverRadius: 7,
+              yAxisID: "yRight", order: 1, spanGaps: false,
+            },
+          ],
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          interaction: { mode: "index", intersect: false },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: "#1e1b4b", titleColor: "#e0e7ff",
+              bodyColor: "#c7d2fe", padding: 12, cornerRadius: 8,
+              callbacks: {
+                label: c => c.dataset.yAxisID === "yRight"
+                  ? ` ${c.dataset.label}: ${c.parsed.y != null ? c.parsed.y + "%" : "N/A"}`
+                  : ` ${c.dataset.label}: ${c.parsed.y != null ? unit + c.parsed.y + "m" : "N/A"}`,
+              },
+            },
+          },
+          scales: {
+            x: { grid: { display: false }, ticks: { font: { size: 12 }, color: "#6b7280" }, border: { display: false } },
+            yLeft: {
+              position: "left", beginAtZero: true,
+              grid: { color: "#f3f4f6" }, border: { display: false, dash: [4, 4] },
+              ticks: { font: { size: 11 }, color: "#9ca3af", callback: v => `£${v}m` },
+            },
+            yRight: {
+              position: "right", beginAtZero: true,
+              grid: { drawOnChartArea: false }, border: { display: false },
+              ticks: { font: { size: 11 }, color: "#f59e0b", callback: v => `${v}%` },
+            },
+          },
+        },
+      });
+    }
+
+    // Financials PDF
+    document.getElementById("export-fin-btn").addEventListener("click", async function () {
+      this.disabled = true;
+      this.innerHTML = '<i data-lucide="loader-2" style="width:15px;height:15px;"></i> Exporting…';
+      lucide.createIcons();
+
+      const company = lastCompany || "Company";
+      const kpiFields = [
+        { label: "Revenue",            val: document.getElementById("fin-revenue").textContent,      sub: document.getElementById("fin-revenue-sub").textContent },
+        { label: "Profit",             val: document.getElementById("fin-profit").textContent,       sub: document.getElementById("fin-profit-sub").textContent },
+        { label: "Valuation / Mkt Cap",val: document.getElementById("fin-valuation").textContent,   sub: document.getElementById("fin-valuation-sub").textContent },
+        { label: "Employees",          val: document.getElementById("fin-employees").textContent,    sub: document.getElementById("fin-employees-sub").textContent },
+      ];
+
+      const kpiHtml = kpiFields.map(k => `
+        <div style="background:#f8f9ff;border:1px solid #e0e7ff;border-radius:10px;padding:16px 18px;">
+          <div style="font-size:9px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;">${k.label}</div>
+          <div style="font-size:18px;font-weight:800;color:#1a1a2e;">${k.val}</div>
+          ${k.sub ? `<div style="font-size:10px;color:#6b7280;margin-top:4px;">${k.sub}</div>` : ""}
+        </div>`).join("");
+
+      const chartCanvas = document.getElementById("fin-perf-chart");
+      const chartImg = finChart && chartCanvas
+        ? `<img src="${chartCanvas.toDataURL("image/png")}" style="width:100%;border-radius:8px;" />`
+        : "";
+
+      const narrative = [...document.querySelectorAll("#fin-narrative-text p")]
+        .map(p => `<p style="font-size:12px;line-height:1.75;color:#374151;margin-bottom:8px;">${p.textContent}</p>`)
+        .join("");
+
+      const el = document.createElement("div");
+      el.style.cssText = "width:700px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;";
+      el.innerHTML = `
+        <div style="background:linear-gradient(135deg,#1e1b4b 0%,#4f46e5 100%);padding:32px 40px 24px;border-radius:12px 12px 0 0;">
+          <div style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#a5b4fc;margin-bottom:10px;">Financial Overview</div>
+          <div style="font-size:26px;font-weight:800;color:#fff;margin-bottom:10px;">${company}</div>
+          <div style="font-size:11px;color:#c7d2fe;">Generated ${new Date().toLocaleDateString("en-GB",{year:"numeric",month:"long",day:"numeric"})}</div>
+        </div>
+        <div style="background:#fff;padding:32px 40px;border-radius:0 0 12px 12px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:28px;">${kpiHtml}</div>
+          ${chartImg ? `
+          <div style="background:#f8f9ff;border:1px solid #e0e7ff;border-radius:10px;padding:20px 24px;margin-bottom:28px;">
+            <div style="font-size:10px;font-weight:700;color:#4f46e5;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;">Revenue Trend</div>
+            ${chartImg}
+          </div>` : ""}
+          ${narrative ? `<div style="font-size:11px;font-weight:700;color:#4f46e5;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;">Financial Summary</div>${narrative}` : ""}
+        </div>`;
+
+      await html2pdf().set({
+        margin: 10,
+        filename: `${company} - Financials.pdf`,
+        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+        html2canvas: { scale: 2, useCORS: true, logging: false },
+        pagebreak: { mode: ["avoid-all", "css"] },
+      }).from(el).save();
+
+      this.disabled = false;
+      this.innerHTML = '<i data-lucide="download" style="width:15px;height:15px;"></i> Export PDF';
+      lucide.createIcons();
+    });
+
     // ── PDF Export ────────────────────────────────────────
     const PDF_OPTS = {
       margin: [12, 12, 12, 12],
