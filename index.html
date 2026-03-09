@@ -416,139 +416,115 @@
     .btn-export:hover { background: #f3f4f6; border-color: #d1d5db; }
     .btn-export:disabled { opacity: 0.5; cursor: not-allowed; }
 
-    /* ── Financials view ─────────────────────────── */
-    #financials-view { max-width: 1000px; }
-
-    .fin-empty-state {
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      padding: 80px 24px; color: #9ca3af; text-align: center; gap: 16px;
-    }
-    .fin-empty-state p { font-size: 0.95rem; max-width: 380px; line-height: 1.65; }
-
-    .fin-kpi-row {
-      display: grid; grid-template-columns: repeat(4, 1fr);
-      gap: 16px; width: 100%; margin-bottom: 20px;
-    }
-    .fin-kpi-card {
-      background: #fff; border-radius: 16px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.07);
-      padding: 20px 22px;
-      border-top: 3px solid #4f46e5;
-    }
-    .fin-kpi-card.green  { border-top-color: #10b981; }
-    .fin-kpi-card.amber  { border-top-color: #f59e0b; }
-    .fin-kpi-card.purple { border-top-color: #7c3aed; }
-    .fin-kpi-label {
-      font-size: 0.7rem; font-weight: 700; color: #9ca3af;
-      text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;
-    }
-    .fin-kpi-value { font-size: 1.45rem; font-weight: 800; color: #1a1a2e; line-height: 1.1; }
-    .fin-kpi-sub   { font-size: 0.72rem; color: #9ca3af; margin-top: 5px; }
-
-    .fin-charts-row {
-      display: grid; grid-template-columns: 2fr 1fr;
-      gap: 20px; width: 100%; margin-bottom: 20px;
-    }
-    .fin-chart-panel { padding: 24px 28px; }
-    .fin-chart-title    { font-size: 0.88rem; font-weight: 700; color: #1a1a2e; margin-bottom: 3px; }
-    .fin-chart-subtitle { font-size: 0.75rem; color: #9ca3af; margin-bottom: 16px; }
-
-    .fin-summary-card { padding: 28px 32px; width: 100%; margin-bottom: 20px; }
-    .fin-summary-card h3 {
-      font-size: 0.75rem; font-weight: 700; color: #9ca3af;
-      text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px;
-    }
-    .fin-summary-text { font-size: 0.95rem; line-height: 1.75; color: #374151; }
-    .fin-data-note {
-      margin-top: 14px; padding: 10px 14px;
-      background: #fefce8; border: 1px solid #fde68a;
-      border-radius: 8px; font-size: 0.8rem; color: #92400e; display: none;
-    }
-
-    .fin-loading {
-      display: none; align-items: center; justify-content: center;
-      gap: 12px; padding: 60px 0; font-size: 0.9rem; color: #6b7280;
-    }
-
-    @media (max-width: 860px) {
-      .fin-kpi-row { grid-template-columns: repeat(2, 1fr); }
-      .fin-charts-row { grid-template-columns: 1fr; }
-    }
-
     @media (max-width: 640px) {
       #report-card { padding: 24px 20px; }
       #search-card { flex-direction: column; }
       #search-btn { width: 100%; }
       .form-grid-2, .form-grid-3 { grid-template-columns: 1fr; }
       .field.span-2 { grid-column: span 1; }
-      .fin-kpi-row { grid-template-columns: 1fr 1fr; }
     }
 
-    /* ── Next Steps view ─────────────────────────── */
-    #next-steps-view { max-width: 900px; }
+    /* ── Financials view ──────────────────────── */
+    #financials-view { max-width: 960px; }
 
-    .ns-empty-state {
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      padding: 80px 24px; color: #9ca3af; text-align: center; gap: 16px;
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+      width: 100%;
+      margin-bottom: 24px;
     }
-    .ns-empty-state p { font-size: 0.95rem; max-width: 400px; line-height: 1.65; }
+    .kpi-card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 20px 18px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .kpi-label {
+      font-size: 0.7rem; font-weight: 700;
+      color: #9ca3af; text-transform: uppercase; letter-spacing: 0.06em;
+    }
+    .kpi-value {
+      font-size: 1.45rem; font-weight: 800;
+      color: #1a1a2e; line-height: 1.1;
+    }
+    .kpi-change {
+      font-size: 0.75rem; font-weight: 600;
+    }
+    .kpi-change.pos { color: #10b981; }
+    .kpi-change.neg { color: #ef4444; }
+    .kpi-change.neu { color: #9ca3af; }
 
-    .ns-loading {
-      display: none; align-items: center; justify-content: center;
-      gap: 12px; padding: 60px 0; font-size: 0.9rem; color: #6b7280;
+    .fin-charts-grid {
+      display: grid;
+      grid-template-columns: 3fr 2fr;
+      gap: 20px;
+      width: 100%;
+      margin-bottom: 24px;
+    }
+    .fin-chart-card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 22px 24px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+    }
+    .fin-chart-title {
+      font-size: 0.88rem; font-weight: 700; color: #1a1a2e; margin-bottom: 3px;
+    }
+    .fin-chart-sub {
+      font-size: 0.73rem; color: #9ca3af; margin-bottom: 18px;
+    }
+    .fin-chart-container { position: relative; height: 210px; }
+    .fin-chart-container-sm { position: relative; height: 186px; }
+
+    .fin-bottom-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      width: 100%;
+      margin-bottom: 24px;
     }
 
-    .ns-section { width: 100%; margin-bottom: 20px; }
-    .ns-card { padding: 24px 28px; }
-    .ns-card-title {
-      font-size: 0.75rem; font-weight: 700; color: #9ca3af;
-      text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 16px;
+    .fin-narrative-card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 26px 30px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+      width: 100%;
+      margin-bottom: 24px;
     }
-
-    .ns-actions-list { display: flex; flex-direction: column; gap: 10px; }
-    .ns-action-item {
-      display: flex; gap: 14px; align-items: flex-start;
-      padding: 14px 16px; border-radius: 10px;
+    .fin-narrative-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 16px; padding-bottom: 14px; border-bottom: 1px solid #f3f4f6;
     }
-    .ns-action-item.urgent { background: #fef2f2; border: 1px solid #fecaca; }
-    .ns-action-item.medium { background: #fffbeb; border: 1px solid #fde68a; }
-    .ns-action-item.low    { background: #f0fdf4; border: 1px solid #bbf7d0; }
-    .ns-action-dot {
-      width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; margin-top: 6px;
+    .fin-narrative-title {
+      font-size: 0.92rem; font-weight: 700; color: #1a1a2e;
     }
-    .ns-action-item.urgent .ns-action-dot { background: #ef4444; }
-    .ns-action-item.medium .ns-action-dot { background: #f59e0b; }
-    .ns-action-item.low    .ns-action-dot { background: #10b981; }
-    .ns-action-label { font-size: 0.82rem; font-weight: 700; color: #1a1a2e; margin-bottom: 3px; }
-    .ns-action-detail { font-size: 0.87rem; line-height: 1.6; color: #374151; }
-
-    .ns-message-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-    .ns-message-item {
-      padding: 16px 18px; background: #f8f9ff; border: 1px solid #e0e7ff;
-      border-radius: 10px; border-left: 3px solid #4f46e5;
+    .fin-narrative-body {
+      font-size: 0.9rem; line-height: 1.8; color: #374151;
     }
-    .ns-message-heading { font-size: 0.82rem; font-weight: 700; color: #4f46e5; margin-bottom: 6px; }
-    .ns-message-item p { font-size: 0.88rem; line-height: 1.6; color: #374151; }
-
-    .ns-stakeholder-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
-    .ns-stakeholder-item {
-      padding: 14px 16px; background: #fafafa; border: 1px solid #e5e7eb; border-radius: 10px;
+    .fin-narrative-body p { margin-bottom: 10px; }
+    .fin-narrative-body p:last-child { margin-bottom: 0; }
+    .fin-source-badge {
+      font-size: 0.7rem; font-weight: 600; padding: 3px 8px;
+      border-radius: 20px; background: #f0fdf4; color: #059669; border: 1px solid #bbf7d0;
     }
-    .ns-stakeholder-title { font-size: 0.88rem; font-weight: 700; color: #1a1a2e; margin-bottom: 5px; }
-    .ns-stakeholder-desc { font-size: 0.83rem; line-height: 1.55; color: #6b7280; }
-
-    .ns-strategy-text { font-size: 0.95rem; line-height: 1.75; color: #374151; }
-
-    .ns-objection-list { display: flex; flex-direction: column; gap: 12px; }
-    .ns-objection-item {
-      padding: 14px 18px; background: #fafafa; border: 1px solid #e5e7eb; border-radius: 10px;
+    .fin-source-badge.est {
+      background: #fffbeb; color: #b45309; border-color: #fde68a;
     }
-    .ns-objection-q { font-size: 0.88rem; font-weight: 700; color: #374151; margin-bottom: 5px; }
-    .ns-objection-a { font-size: 0.87rem; line-height: 1.6; color: #6b7280; }
-
-    @media (max-width: 700px) {
-      .ns-message-grid { grid-template-columns: 1fr; }
-      .ns-stakeholder-grid { grid-template-columns: 1fr 1fr; }
+    .fin-source-badge.lim {
+      background: #f9fafb; color: #9ca3af; border-color: #e5e7eb;
+    }
+    .fin-empty-state {
+      text-align: center; padding: 80px 20px;
+      color: #9ca3af; font-size: 0.95rem; width: 100%;
+    }
+    .fin-empty-state svg { opacity: 0.3; margin-bottom: 16px; }
+    .fin-empty-state p { margin-top: 8px; font-size: 0.85rem; }
+    .fin-loading {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 0.85rem; color: #6b7280;
     }
   </style>
 </head>
@@ -576,13 +552,8 @@
     </button>
 
     <button class="nav-btn" data-view="financials">
-      <i data-lucide="trending-up" style="width:20px;height:20px;"></i>
+      <i data-lucide="bar-chart-2" style="width:20px;height:20px;"></i>
       <span class="tooltip">Financials</span>
-    </button>
-
-    <button class="nav-btn" data-view="next-steps">
-      <i data-lucide="target" style="width:20px;height:20px;"></i>
-      <span class="tooltip">Next Steps</span>
     </button>
 
     <div class="nav-spacer"></div>
@@ -927,105 +898,6 @@
 
     </div>
 
-    <!-- ── Financials view ─────────────────────── -->
-    <div class="view" id="financials-view">
-      <div class="page-header">
-        <h1>Financial Summary</h1>
-        <p id="financials-company-label">Research a company first to generate a financial summary</p>
-      </div>
-
-      <!-- Generate banner -->
-      <div class="ai-banner" id="fin-banner" style="display:none; width:100%; max-width:1000px;">
-        <p><strong id="fin-banner-company"></strong> report is available. Generate an AI-powered financial summary with charts.</p>
-        <button class="btn-primary" id="fin-generate-btn" style="white-space:nowrap;">Analyse Financials</button>
-      </div>
-
-      <!-- Empty state -->
-      <div id="fin-empty" class="fin-empty-state">
-        <i data-lucide="bar-chart-2" style="width:52px;height:52px;color:#d1d5db;"></i>
-        <p>Research a company from the home page, then click <strong>Analyse Financials</strong> to see revenue trends, profit margins, and an AI financial breakdown.</p>
-      </div>
-
-      <!-- Loading -->
-      <div id="fin-loading" class="fin-loading">
-        <div class="spinner"></div>
-        Analysing financial data…
-      </div>
-
-      <!-- Content -->
-      <div id="fin-content" style="display:none; width:100%;">
-
-        <!-- KPI row -->
-        <div class="fin-kpi-row" id="fin-kpi-row"></div>
-
-        <!-- Trend + breakdown -->
-        <div class="fin-charts-row">
-          <div class="card fin-chart-panel">
-            <div class="fin-chart-title">Revenue &amp; Profit Trend</div>
-            <div class="fin-chart-subtitle" id="fin-trend-subtitle">Annual financial performance</div>
-            <div style="position:relative;height:220px;">
-              <canvas id="fin-trend-canvas"></canvas>
-            </div>
-          </div>
-          <div class="card fin-chart-panel">
-            <div class="fin-chart-title">Revenue Breakdown</div>
-            <div class="fin-chart-subtitle">By business segment</div>
-            <div style="position:relative;height:220px;">
-              <canvas id="fin-breakdown-canvas"></canvas>
-            </div>
-          </div>
-        </div>
-
-        <!-- YoY growth -->
-        <div class="card fin-chart-panel" style="margin-bottom:20px;">
-          <div class="fin-chart-title">Year-on-Year Revenue Growth</div>
-          <div class="fin-chart-subtitle">Annual growth rate (%)</div>
-          <div style="position:relative;height:170px;">
-            <canvas id="fin-growth-canvas"></canvas>
-          </div>
-        </div>
-
-        <!-- AI summary -->
-        <div class="card fin-summary-card">
-          <h3>AI Financial Analysis</h3>
-          <div class="fin-summary-text" id="fin-summary-text"></div>
-          <div class="fin-data-note" id="fin-data-note"></div>
-        </div>
-
-        <!-- Export -->
-        <div class="export-bar" style="max-width:1000px;">
-          <button class="btn-export" id="export-fin-btn">
-            <i data-lucide="download" style="width:15px;height:15px;"></i> Export PDF
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── Next Steps view ───────────────────────── -->
-    <div class="view" id="next-steps-view">
-      <div class="page-header">
-        <h1>Next Steps</h1>
-        <p id="ns-company-label">Research a company first to generate sales engagement recommendations</p>
-      </div>
-
-      <div class="ai-banner" id="ns-banner" style="display:none; width:100%; max-width:900px;">
-        <p><strong id="ns-banner-company"></strong> report is available. Generate AI-powered next steps for your software sales engagement.</p>
-        <button class="btn-primary" id="ns-generate-btn" style="white-space:nowrap;">Generate Next Steps</button>
-      </div>
-
-      <div id="ns-empty" class="ns-empty-state">
-        <i data-lucide="target" style="width:52px;height:52px;color:#d1d5db;"></i>
-        <p>Research a company from the home page, then click <strong>Generate Next Steps</strong> to get AI-powered software sales engagement recommendations.</p>
-      </div>
-
-      <div id="ns-loading" class="ns-loading">
-        <div class="spinner"></div>
-        Generating next steps…
-      </div>
-
-      <div id="ns-content" style="display:none; width:100%;"></div>
-    </div>
-
     <div class="view" id="settings-view">
       <div class="page-header">
         <h1>Settings</h1>
@@ -1102,6 +974,111 @@
       </div>
     </div>
 
+    <!-- ── Financials view ─────────────────────── -->
+    <div class="view" id="financials-view">
+      <div class="page-header">
+        <h1>Financial Summary</h1>
+        <p id="fin-company-label">Research a company first to view financial data</p>
+      </div>
+
+      <!-- Empty state -->
+      <div id="fin-empty" class="fin-empty-state">
+        <i data-lucide="bar-chart-2" style="width:48px;height:48px;display:block;margin:0 auto 12px;"></i>
+        <strong>No company researched yet</strong>
+        <p>Go to Research, search for a company, then return here for a financial breakdown.</p>
+      </div>
+
+      <!-- Content (hidden until populated) -->
+      <div id="fin-content" style="display:none; width:100%;">
+
+        <!-- KPI row -->
+        <div class="kpi-grid" id="fin-kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-label">Revenue</div>
+            <div class="kpi-value" id="fin-kpi-revenue">—</div>
+            <div class="kpi-change neu" id="fin-kpi-revenue-note"></div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Revenue Growth</div>
+            <div class="kpi-value" id="fin-kpi-growth">—</div>
+            <div class="kpi-change neu" id="fin-kpi-growth-note">YoY</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Gross Margin</div>
+            <div class="kpi-value" id="fin-kpi-gm">—</div>
+            <div class="kpi-change neu" id="fin-kpi-gm-note"></div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Operating Margin</div>
+            <div class="kpi-value" id="fin-kpi-om">—</div>
+            <div class="kpi-change neu" id="fin-kpi-om-note"></div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Headcount</div>
+            <div class="kpi-value" id="fin-kpi-hc">—</div>
+            <div class="kpi-change neu" id="fin-kpi-hc-note"></div>
+          </div>
+        </div>
+
+        <!-- Revenue trend + Margin chart -->
+        <div class="fin-charts-grid">
+          <div class="fin-chart-card">
+            <div class="fin-chart-title">Revenue &amp; Gross Profit</div>
+            <div class="fin-chart-sub" id="fin-rev-sub">5-year trend</div>
+            <div class="fin-chart-container">
+              <canvas id="fin-rev-chart"></canvas>
+            </div>
+          </div>
+          <div class="fin-chart-card">
+            <div class="fin-chart-title">Operating Margin %</div>
+            <div class="fin-chart-sub" id="fin-margin-sub">Profitability trend</div>
+            <div class="fin-chart-container">
+              <canvas id="fin-margin-chart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Breakdown donut + Margin bar -->
+        <div class="fin-bottom-grid">
+          <div class="fin-chart-card">
+            <div class="fin-chart-title">Revenue Mix</div>
+            <div class="fin-chart-sub" id="fin-donut-sub">By segment or geography</div>
+            <div class="fin-chart-container-sm">
+              <canvas id="fin-donut-chart"></canvas>
+            </div>
+          </div>
+          <div class="fin-chart-card">
+            <div class="fin-chart-title">Cost Structure</div>
+            <div class="fin-chart-sub" id="fin-cost-sub">Latest year breakdown</div>
+            <div class="fin-chart-container-sm">
+              <canvas id="fin-cost-chart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- AI narrative -->
+        <div class="fin-narrative-card">
+          <div class="fin-narrative-header">
+            <div class="fin-narrative-title">Financial Analysis</div>
+            <div id="fin-source-badge" class="fin-source-badge est" style="display:none;"></div>
+          </div>
+          <div id="fin-narrative-body" class="fin-narrative-body">
+            <div class="fin-loading">
+              <div class="spinner"></div> Generating financial analysis…
+            </div>
+          </div>
+        </div>
+
+        <!-- Export -->
+        <div class="export-bar" style="max-width:960px;">
+          <button class="btn-export" id="export-financials-btn">
+            <i data-lucide="download" style="width:15px;height:15px;"></i> Export PDF
+          </button>
+        </div>
+
+      </div>
+    </div>
+
   </main>
 
   <script>
@@ -1141,10 +1118,8 @@ Notable news, acquisitions, partnerships, or strategic moves from the past year 
 Be factual and concise. If certain information is not publicly known or verifiable, say so rather than speculating.`;
 
     // ── State ─────────────────────────────────────────────
-    let lastCompany        = "";
+    let lastCompany      = "";
     let lastReportMarkdown = "";
-    let lastNsCompany      = "";
-    let lastNsData         = null;
 
     // ── Navigation ───────────────────────────────────────
     document.querySelectorAll(".nav-btn[data-view]").forEach(btn => {
@@ -1155,8 +1130,7 @@ Be factual and concise. If certain information is not publicly known or verifiab
         btn.classList.add("active");
         document.getElementById(`${target}-view`).classList.add("active");
         if (target === "meeting-prep") onMeetingPrepOpen();
-        if (target === "financials")   onFinancialsOpen();
-        if (target === "next-steps")   onNextStepsOpen();
+        if (target === "financials") onFinancialsOpen();
       });
     });
 
@@ -1395,16 +1369,11 @@ Be factual and concise. If certain information is not publicly known or verifiab
           }
         }
 
-        // Store report for meeting prep
+        // Store report for meeting prep and financials
         lastCompany        = company;
         lastReportMarkdown = accumulated;
-        lastFinCompany     = "";   // reset so financials re-generates for new company
-        lastFinData        = null;
-        lastNsCompany      = "";   // reset so next steps re-generates for new company
-        lastNsData         = null;
+        finLastCompany     = "";
         updateAiBanner();
-        updateFinBanner();
-        updateNsBanner();
         renderChart();
         document.getElementById("export-bar-home").style.display = "flex";
         lucide.createIcons();
@@ -1772,92 +1741,89 @@ const el = document.createElement("div");
       lucide.createIcons();
     });
 
-    // ── Financials ────────────────────────────────────────
-    let finTrendChart     = null;
-    let finBreakdownChart = null;
-    let finGrowthChart    = null;
-    let lastFinCompany    = "";
-    let lastFinData       = null;
+    // ── Financials view ───────────────────────────────────
+    let finRevChart    = null;
+    let finMarginChart = null;
+    let finDonutChart  = null;
+    let finCostChart   = null;
+    let finLastCompany = "";
 
-    function updateFinBanner() {
-      const banner = document.getElementById("fin-banner");
-      if (lastCompany && lastReportMarkdown) {
-        document.getElementById("fin-banner-company").textContent = lastCompany;
-        banner.style.display = "flex";
-      } else {
-        banner.style.display = "none";
-      }
+    function destroyFinCharts() {
+      [finRevChart, finMarginChart, finDonutChart, finCostChart].forEach(c => { if (c) c.destroy(); });
+      finRevChart = finMarginChart = finDonutChart = finCostChart = null;
     }
 
-    function onFinancialsOpen() {
-      const label = document.getElementById("financials-company-label");
-      label.textContent = lastCompany
-        ? `Financial summary for: ${lastCompany}`
-        : "Research a company first to generate a financial summary";
-      updateFinBanner();
-
-      if (lastFinData && lastFinCompany === lastCompany) {
-        document.getElementById("fin-empty").style.display   = "none";
-        document.getElementById("fin-loading").style.display = "none";
-        document.getElementById("fin-content").style.display = "block";
-        renderFinancials(lastFinData);
-      } else {
-        document.getElementById("fin-empty").style.display   = "flex";
-        document.getElementById("fin-loading").style.display = "none";
-        document.getElementById("fin-content").style.display = "none";
-      }
+    async function onFinancialsOpen() {
       lucide.createIcons();
-    }
+      const company = lastCompany;
+      document.getElementById("fin-company-label").textContent =
+        company ? `Financial overview for ${company}` : "Research a company first to view financial data";
 
-    document.getElementById("fin-generate-btn").addEventListener("click", async () => {
+      if (!company || !lastReportMarkdown) {
+        document.getElementById("fin-empty").style.display = "block";
+        document.getElementById("fin-content").style.display = "none";
+        return;
+      }
+
+      document.getElementById("fin-empty").style.display = "none";
+      document.getElementById("fin-content").style.display = "block";
+
+      // Don't re-fetch if same company
+      if (finLastCompany === company) return;
+      finLastCompany = company;
+
+      // Reset narrative
+      document.getElementById("fin-narrative-body").innerHTML =
+        '<div class="fin-loading"><div class="spinner"></div> Generating financial analysis…</div>';
+      document.getElementById("fin-source-badge").style.display = "none";
+      lucide.createIcons();
+
       const apiKey = getApiKey();
-      if (!apiKey || !lastReportMarkdown) return;
+      if (!apiKey) {
+        document.getElementById("fin-narrative-body").textContent = "Add your Anthropic API key in Settings to generate analysis.";
+        return;
+      }
 
-      const btn = document.getElementById("fin-generate-btn");
-      btn.disabled = true;
-      btn.textContent = "Analysing…";
+      const prompt = `Analyse this company research report and extract financial data. Return ONLY valid JSON with no markdown fences.
 
-      document.getElementById("fin-empty").style.display   = "none";
-      document.getElementById("fin-loading").style.display = "flex";
-      document.getElementById("fin-content").style.display = "none";
-
-      const prompt = `Based on this company research report, extract or estimate financial data and return a JSON object.
-
-Rules:
-- Use actual figures from the report where available
-- For private companies where exact figures are unavailable, provide realistic estimates based on company size, industry, and any hints in the report
-- All monetary values as numbers in £ millions (e.g. 1200 means £1,200m = £1.2bn)
-- Include the 5 most recent calendar years in trend_data and 4 most recent in growth_rates
-- If revenue segment breakdown is unknown, create plausible segments for the business model
-- Be specific and realistic — do not use placeholder zeros
-
-Return ONLY this JSON (no markdown fences):
 {
   "kpis": {
-    "revenue": "£Xbn or £Xm",
-    "revenue_growth": "+X% or -X% YoY",
-    "operating_margin": "X.X%",
-    "headcount": "~X,XXX employees",
-    "market_cap_or_valuation": "£Xbn or 'Private'",
-    "listing": "LSE / AIM / Private"
+    "revenue": "£XXXm",
+    "growth": "+X.X%",
+    "growth_positive": true,
+    "gross_margin": "XX%",
+    "op_margin": "XX%",
+    "headcount": "X,XXX",
+    "revenue_note": "FY2024",
+    "growth_note": "YoY",
+    "gm_note": "",
+    "om_note": "",
+    "hc_note": "approx."
   },
-  "trend_data": [
-    {"year": 2020, "revenue_m": 0, "profit_m": 0, "margin_pct": 0}
+  "trend": [
+    { "year": "2020", "revenue": 100, "gross_profit": 45, "op_margin": 12 }
   ],
-  "revenue_breakdown": [
-    {"segment": "Name", "pct": 40}
+  "segments": [
+    { "label": "UK", "value": 60 },
+    { "label": "International", "value": 40 }
   ],
-  "growth_rates": [
-    {"year": 2021, "pct": 5.2},
-    {"year": 2022, "pct": 8.1},
-    {"year": 2023, "pct": 12.3},
-    {"year": 2024, "pct": 9.5}
+  "cost_structure": [
+    { "label": "Gross Profit", "value": 45 },
+    { "label": "Operating Costs", "value": 33 },
+    { "label": "Net Profit", "value": 12 }
   ],
-  "summary": "3-4 sentence paragraph analysing the company's financial health, trajectory, key growth drivers, and any risks or challenges. Reference specific figures.",
-  "data_note": "Brief note on data sources and reliability. E.g. 'Revenue figures from Companies House filings; segment breakdown estimated.' or 'All figures are estimates as the company is privately held.'"
+  "narrative": "Write 3 paragraphs of financial analysis covering performance trends, profitability drivers, and outlook. Be specific where data is available.",
+  "data_quality": "actual"
 }
 
-Report:
+Rules:
+- trend: 3–5 years of data; revenue & gross_profit in £m (or consistent unit); op_margin as a number (percentage); use null for unknown values
+- segments: revenue split by geography, product line, or division if known; otherwise omit
+- cost_structure: show how latest revenue breaks down (e.g. gross profit, opex, net profit) as percentages or £m
+- data_quality: "actual" if from real filings, "estimated" if inferred, "limited" if little financial data available
+- If figures are not available for a KPI, use "N/A"
+
+Company report:
 ${lastReportMarkdown}`;
 
       try {
@@ -1878,82 +1844,52 @@ ${lastReportMarkdown}`;
 
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const json = await res.json();
-        const text = (json.content?.[0]?.text || "")
-          .replace(/^```[a-z]*\n?/, "").replace(/\n?```$/, "").trim();
+        let text = (json.content?.[0]?.text || "").replace(/^```[a-z]*\n?/, "").replace(/\n?```$/, "").trim();
         const data = JSON.parse(text);
-        lastFinData    = data;
-        lastFinCompany = lastCompany;
-        renderFinancials(data);
+        renderFinancials(company, data);
       } catch (err) {
-        document.getElementById("fin-loading").style.display = "none";
-        document.getElementById("fin-empty").style.display   = "flex";
-        alert(`Could not generate financial summary: ${err.message}`);
-      } finally {
-        btn.disabled = false;
-        btn.textContent = "Analyse Financials";
+        document.getElementById("fin-narrative-body").textContent =
+          `Could not generate analysis: ${err.message}`;
       }
-    });
+    }
 
-    function renderFinancials(data) {
-      document.getElementById("fin-loading").style.display = "none";
-      document.getElementById("fin-content").style.display = "block";
-
-      // ── KPI cards ──────────────────────────────────────
+    function renderFinancials(company, data) {
+      // KPIs
       const kpis = data.kpis || {};
-      const isListed = kpis.listing && kpis.listing !== "Private";
-      document.getElementById("fin-kpi-row").innerHTML = `
-        <div class="fin-kpi-card">
-          <div class="fin-kpi-label">Revenue</div>
-          <div class="fin-kpi-value">${kpis.revenue || "—"}</div>
-          <div class="fin-kpi-sub">Most recent year</div>
-        </div>
-        <div class="fin-kpi-card green">
-          <div class="fin-kpi-label">Revenue Growth</div>
-          <div class="fin-kpi-value">${kpis.revenue_growth || "—"}</div>
-          <div class="fin-kpi-sub">Year-on-year</div>
-        </div>
-        <div class="fin-kpi-card amber">
-          <div class="fin-kpi-label">Operating Margin</div>
-          <div class="fin-kpi-value">${kpis.operating_margin || "—"}</div>
-          <div class="fin-kpi-sub">Operating profit / revenue</div>
-        </div>
-        <div class="fin-kpi-card purple">
-          <div class="fin-kpi-label">${isListed ? "Market Cap" : "Valuation / Status"}</div>
-          <div class="fin-kpi-value">${kpis.market_cap_or_valuation || "—"}</div>
-          <div class="fin-kpi-sub">${kpis.listing || ""} · ${kpis.headcount || ""}</div>
-        </div>`;
+      function setKpi(valId, changeId, value, note, positive) {
+        const valEl = document.getElementById(valId);
+        const noteEl = document.getElementById(changeId);
+        valEl.textContent = value || "N/A";
+        noteEl.textContent = note || "";
+        noteEl.className = "kpi-change " + (positive === true ? "pos" : positive === false ? "neg" : "neu");
+      }
+      setKpi("fin-kpi-revenue", "fin-kpi-revenue-note", kpis.revenue, kpis.revenue_note, null);
+      setKpi("fin-kpi-growth",  "fin-kpi-growth-note",  kpis.growth,  kpis.growth_note,  kpis.growth_positive);
+      setKpi("fin-kpi-gm",      "fin-kpi-gm-note",      kpis.gross_margin, kpis.gm_note, null);
+      setKpi("fin-kpi-om",      "fin-kpi-om-note",      kpis.op_margin,    kpis.om_note, null);
+      setKpi("fin-kpi-hc",      "fin-kpi-hc-note",      kpis.headcount,    kpis.hc_note, null);
 
-      // ── Trend chart ─────────────────────────────────────
-      const trendData = data.trend_data || [];
-      if (finTrendChart) { finTrendChart.destroy(); finTrendChart = null; }
-      if (trendData.length) {
-        const ctx = document.getElementById("fin-trend-canvas").getContext("2d");
-        finTrendChart = new Chart(ctx, {
+      destroyFinCharts();
+
+      // Revenue & GP chart
+      const trend = (data.trend || []).filter(t => t.revenue !== null);
+      if (trend.length) {
+        const ctx = document.getElementById("fin-rev-chart").getContext("2d");
+        finRevChart = new Chart(ctx, {
           data: {
-            labels: trendData.map(d => d.year),
+            labels: trend.map(t => t.year),
             datasets: [
               {
                 type: "bar", label: "Revenue",
-                data: trendData.map(d => d.revenue_m),
+                data: trend.map(t => t.revenue),
                 backgroundColor: "rgba(79,70,229,0.82)",
-                borderRadius: 5, borderSkipped: false,
-                yAxisID: "yLeft", order: 2,
+                borderRadius: 5, borderSkipped: false, yAxisID: "y", order: 2,
               },
               {
-                type: "bar", label: "Operating Profit",
-                data: trendData.map(d => d.profit_m),
-                backgroundColor: "rgba(165,180,252,0.78)",
-                borderRadius: 5, borderSkipped: false,
-                yAxisID: "yLeft", order: 3,
-              },
-              {
-                type: "line", label: "Margin %",
-                data: trendData.map(d => d.margin_pct),
-                borderColor: "#f59e0b", backgroundColor: "rgba(245,158,11,0.06)",
-                borderWidth: 2.5,
-                pointBackgroundColor: "#f59e0b", pointBorderColor: "#fff", pointBorderWidth: 2,
-                pointRadius: 4, tension: 0.4, fill: false,
-                yAxisID: "yRight", order: 1,
+                type: "bar", label: "Gross Profit",
+                data: trend.map(t => t.gross_profit),
+                backgroundColor: "rgba(165,180,252,0.75)",
+                borderRadius: 5, borderSkipped: false, yAxisID: "y", order: 3,
               },
             ],
           },
@@ -1961,78 +1897,40 @@ ${lastReportMarkdown}`;
             responsive: true, maintainAspectRatio: false,
             interaction: { mode: "index", intersect: false },
             plugins: {
-              legend: { display: true, position: "top", labels: { boxWidth: 11, font: { size: 11 }, padding: 14 } },
+              legend: { display: true, position: "bottom", labels: { font: { size: 11 }, boxWidth: 12, padding: 12 } },
               tooltip: {
                 backgroundColor: "#1e1b4b", titleColor: "#e0e7ff", bodyColor: "#c7d2fe",
                 padding: 10, cornerRadius: 8,
-                callbacks: {
-                  label: c => c.dataset.yAxisID === "yRight"
-                    ? ` ${c.dataset.label}: ${c.parsed.y}%`
-                    : ` ${c.dataset.label}: £${c.parsed.y}m`,
-                },
+                callbacks: { label: c => ` ${c.dataset.label}: £${c.parsed.y}m` },
               },
             },
             scales: {
               x: { grid: { display: false }, ticks: { font: { size: 11 }, color: "#6b7280" }, border: { display: false } },
-              yLeft: {
-                position: "left", grid: { color: "#f3f4f6" }, border: { display: false },
-                beginAtZero: true,
-                ticks: { font: { size: 10 }, color: "#9ca3af", callback: v => `£${v}m` },
-              },
-              yRight: {
-                position: "right", grid: { drawOnChartArea: false }, border: { display: false },
-                beginAtZero: true,
-                ticks: { font: { size: 10 }, color: "#f59e0b", callback: v => `${v}%` },
-              },
+              y: { grid: { color: "#f3f4f6" }, border: { display: false }, beginAtZero: true,
+                ticks: { font: { size: 11 }, color: "#9ca3af", callback: v => `£${v}m` } },
             },
           },
         });
       }
 
-      // ── Breakdown donut ─────────────────────────────────
-      const breakdownData = data.revenue_breakdown || [];
-      if (finBreakdownChart) { finBreakdownChart.destroy(); finBreakdownChart = null; }
-      if (breakdownData.length) {
-        const palette = ["#4f46e5","#7c3aed","#06b6d4","#10b981","#f59e0b","#ef4444","#ec4899"];
-        const ctx = document.getElementById("fin-breakdown-canvas").getContext("2d");
-        finBreakdownChart = new Chart(ctx, {
-          type: "doughnut",
+      // Margin chart
+      const marginTrend = trend.filter(t => t.op_margin !== null);
+      if (marginTrend.length) {
+        const ctx2 = document.getElementById("fin-margin-chart").getContext("2d");
+        finMarginChart = new Chart(ctx2, {
+          type: "line",
           data: {
-            labels: breakdownData.map(d => d.segment),
+            labels: marginTrend.map(t => t.year),
             datasets: [{
-              data: breakdownData.map(d => d.pct),
-              backgroundColor: palette.slice(0, breakdownData.length),
-              borderWidth: 2, borderColor: "#fff",
-            }],
-          },
-          options: {
-            responsive: true, maintainAspectRatio: false,
-            cutout: "65%",
-            plugins: {
-              legend: { position: "bottom", labels: { boxWidth: 10, font: { size: 10 }, padding: 8 } },
-              tooltip: {
-                backgroundColor: "#1e1b4b", titleColor: "#e0e7ff", bodyColor: "#c7d2fe",
-                callbacks: { label: c => ` ${c.label}: ${c.raw}%` },
-              },
-            },
-          },
-        });
-      }
-
-      // ── Growth bars ─────────────────────────────────────
-      const growthData = data.growth_rates || [];
-      if (finGrowthChart) { finGrowthChart.destroy(); finGrowthChart = null; }
-      if (growthData.length) {
-        const ctx = document.getElementById("fin-growth-canvas").getContext("2d");
-        finGrowthChart = new Chart(ctx, {
-          type: "bar",
-          data: {
-            labels: growthData.map(d => d.year),
-            datasets: [{
-              label: "YoY Growth %",
-              data: growthData.map(d => d.pct),
-              backgroundColor: growthData.map(d => d.pct >= 0 ? "rgba(16,185,129,0.82)" : "rgba(239,68,68,0.82)"),
-              borderRadius: 5, borderSkipped: false,
+              label: "Operating Margin %",
+              data: marginTrend.map(t => t.op_margin),
+              borderColor: "#f59e0b",
+              backgroundColor: "rgba(245,158,11,0.08)",
+              borderWidth: 2.5,
+              pointBackgroundColor: "#f59e0b",
+              pointBorderColor: "#fff", pointBorderWidth: 2,
+              pointRadius: 5, pointHoverRadius: 7,
+              tension: 0.4, fill: true,
             }],
           },
           options: {
@@ -2041,101 +1939,161 @@ ${lastReportMarkdown}`;
               legend: { display: false },
               tooltip: {
                 backgroundColor: "#1e1b4b", titleColor: "#e0e7ff", bodyColor: "#c7d2fe",
-                callbacks: { label: c => ` Growth: ${c.parsed.y > 0 ? "+" : ""}${c.parsed.y}%` },
+                padding: 10, cornerRadius: 8,
+                callbacks: { label: c => ` Operating Margin: ${c.parsed.y}%` },
               },
             },
             scales: {
               x: { grid: { display: false }, ticks: { font: { size: 11 }, color: "#6b7280" }, border: { display: false } },
-              y: {
-                grid: { color: "#f3f4f6" }, border: { display: false },
-                ticks: { font: { size: 10 }, color: "#9ca3af", callback: v => `${v > 0 ? "+" : ""}${v}%` },
-              },
+              y: { grid: { color: "#f3f4f6" }, border: { display: false }, beginAtZero: false,
+                ticks: { font: { size: 11 }, color: "#f59e0b", callback: v => `${v}%` } },
             },
           },
         });
       }
 
-      // ── Summary ─────────────────────────────────────────
-      document.getElementById("fin-summary-text").textContent = data.summary || "";
-      const noteEl = document.getElementById("fin-data-note");
-      if (data.data_note) {
-        noteEl.textContent = "ℹ " + data.data_note;
-        noteEl.style.display = "block";
+      // Segments donut
+      const DONUT_COLORS = ["#4f46e5","#818cf8","#a5b4fc","#c7d2fe","#e0e7ff","#6366f1"];
+      const segments = data.segments || [];
+      if (segments.length) {
+        const ctx3 = document.getElementById("fin-donut-chart").getContext("2d");
+        finDonutChart = new Chart(ctx3, {
+          type: "doughnut",
+          data: {
+            labels: segments.map(s => s.label),
+            datasets: [{
+              data: segments.map(s => s.value),
+              backgroundColor: DONUT_COLORS.slice(0, segments.length),
+              borderWidth: 2, borderColor: "#fff", hoverOffset: 6,
+            }],
+          },
+          options: {
+            responsive: true, maintainAspectRatio: false,
+            cutout: "62%",
+            plugins: {
+              legend: { position: "right", labels: { font: { size: 11 }, boxWidth: 12, padding: 10 } },
+              tooltip: {
+                backgroundColor: "#1e1b4b", titleColor: "#e0e7ff", bodyColor: "#c7d2fe",
+                padding: 10, cornerRadius: 8,
+                callbacks: { label: c => ` ${c.label}: ${c.parsed}%` },
+              },
+            },
+          },
+        });
+        document.getElementById("fin-donut-sub").textContent = "By segment / geography";
       } else {
-        noteEl.style.display = "none";
+        document.getElementById("fin-donut-sub").textContent = "No segment data available";
       }
+
+      // Cost structure bar
+      const costs = data.cost_structure || [];
+      if (costs.length) {
+        const COST_COLORS = ["#4f46e5","#f59e0b","#10b981","#ef4444","#8b5cf6"];
+        const ctx4 = document.getElementById("fin-cost-chart").getContext("2d");
+        finCostChart = new Chart(ctx4, {
+          type: "bar",
+          data: {
+            labels: costs.map(c => c.label),
+            datasets: [{
+              data: costs.map(c => c.value),
+              backgroundColor: COST_COLORS.slice(0, costs.length),
+              borderRadius: 6, borderSkipped: false,
+            }],
+          },
+          options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                backgroundColor: "#1e1b4b", titleColor: "#e0e7ff", bodyColor: "#c7d2fe",
+                padding: 10, cornerRadius: 8,
+                callbacks: { label: c => ` ${c.label}: ${c.parsed.y}` },
+              },
+            },
+            scales: {
+              x: { grid: { display: false }, ticks: { font: { size: 11 }, color: "#6b7280" }, border: { display: false } },
+              y: { grid: { color: "#f3f4f6" }, border: { display: false }, beginAtZero: true,
+                ticks: { font: { size: 11 }, color: "#9ca3af" } },
+            },
+          },
+        });
+        document.getElementById("fin-cost-sub").textContent = "Latest year (£m or %)";
+      }
+
+      // Data quality badge
+      const badge = document.getElementById("fin-source-badge");
+      const dq = data.data_quality || "estimated";
+      badge.style.display = "inline-block";
+      if (dq === "actual") {
+        badge.textContent = "Actual data"; badge.className = "fin-source-badge";
+      } else if (dq === "limited") {
+        badge.textContent = "Limited data"; badge.className = "fin-source-badge lim";
+      } else {
+        badge.textContent = "AI estimated"; badge.className = "fin-source-badge est";
+      }
+
+      // Narrative
+      const narrative = (data.narrative || "No narrative available.").trim();
+      document.getElementById("fin-narrative-body").innerHTML =
+        narrative.split("\n\n").map(p => `<p>${p}</p>`).join("");
+
       lucide.createIcons();
     }
 
-    // Financials PDF export
-    document.getElementById("export-fin-btn").addEventListener("click", async function () {
-      if (!lastFinData) return;
+    // Financials PDF
+    document.getElementById("export-financials-btn").addEventListener("click", async function () {
       this.disabled = true;
       this.innerHTML = '<i data-lucide="loader-2" style="width:15px;height:15px;"></i> Exporting…';
       lucide.createIcons();
 
-      const company = lastFinCompany || "Company";
-      const kpis    = lastFinData.kpis || {};
+      const company = lastCompany || "Financial Summary";
 
-      // Capture charts as images
-      const trendImg     = finTrendChart     ? `<img src="${document.getElementById("fin-trend-canvas").toDataURL("image/png")}" style="width:100%;border-radius:8px;" />` : "";
-      const breakdownImg = finBreakdownChart ? `<img src="${document.getElementById("fin-breakdown-canvas").toDataURL("image/png")}" style="width:100%;border-radius:8px;" />` : "";
-      const growthImg    = finGrowthChart    ? `<img src="${document.getElementById("fin-growth-canvas").toDataURL("image/png")}" style="width:100%;border-radius:8px;" />` : "";
+      const getChartImg = id => {
+        const canvas = document.getElementById(id);
+        return canvas ? `<img src="${canvas.toDataURL("image/png")}" style="width:100%;border-radius:6px;" />` : "";
+      };
 
-      const kpiHtml = `
-        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;">
-          ${[
-            ["Revenue", kpis.revenue || "—", "Most recent year", "#4f46e5"],
-            ["Revenue Growth", kpis.revenue_growth || "—", "Year-on-year", "#10b981"],
-            ["Operating Margin", kpis.operating_margin || "—", "Op profit / revenue", "#f59e0b"],
-            [kpis.listing !== "Private" ? "Market Cap" : "Status", kpis.market_cap_or_valuation || "—", (kpis.listing || "") + " · " + (kpis.headcount || ""), "#7c3aed"],
-          ].map(([label, value, sub, color]) => `
-            <div style="border-top:3px solid ${color};background:#fafafa;border-radius:8px;padding:14px 16px;">
-              <div style="font-size:9px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;">${label}</div>
-              <div style="font-size:18px;font-weight:800;color:#1a1a2e;">${value}</div>
-              <div style="font-size:10px;color:#9ca3af;margin-top:4px;">${sub}</div>
-            </div>`).join("")}
+      const kpiHtml = ["revenue","growth","gm","om","hc"].map(k => {
+        const val  = document.getElementById(`fin-kpi-${k}`)?.textContent || "—";
+        const note = document.getElementById(`fin-kpi-${k}-note`)?.textContent || "";
+        const labels = { revenue:"Revenue", growth:"Revenue Growth", gm:"Gross Margin", om:"Operating Margin", hc:"Headcount" };
+        return `<div style="background:#f8f9ff;border:1px solid #e0e7ff;border-radius:10px;padding:14px 16px;">
+          <div style="font-size:9px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">${labels[k]}</div>
+          <div style="font-size:20px;font-weight:800;color:#1a1a2e;">${val}</div>
+          <div style="font-size:10px;color:#6b7280;margin-top:4px;">${note}</div>
         </div>`;
+      }).join("");
+
+      const narrative = document.getElementById("fin-narrative-body")?.innerHTML || "";
 
       const el = document.createElement("div");
-      el.style.cssText = "width:720px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#1a1a2e;";
+      el.style.cssText = "width:700px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; color:#1a1a2e;";
       el.innerHTML = `
-        <style>
-          *{box-sizing:border-box;margin:0;padding:0;}
-          .hdr{background:linear-gradient(135deg,#1e1b4b,#4f46e5);padding:32px 36px 24px;border-radius:12px 12px 0 0;}
-          .hdr .lbl{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#a5b4fc;margin-bottom:8px;}
-          .hdr h1{font-size:26px;font-weight:800;color:#fff;margin-bottom:10px;}
-          .hdr .meta{font-size:10px;color:#c7d2fe;}
-          .body{padding:24px 36px 28px;background:#fff;border-radius:0 0 12px 12px;}
-          .section-title{font-size:9px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:.08em;margin:20px 0 10px;}
-          .chart-pair{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:16px;}
-          .chart-box{background:#f8f9ff;border:1px solid #e0e7ff;border-radius:8px;padding:14px;}
-          .chart-box-title{font-size:10px;font-weight:700;color:#4f46e5;margin-bottom:8px;}
-          .summary-text{font-size:11px;line-height:1.75;color:#374151;}
-          .data-note{margin-top:10px;padding:8px 12px;background:#fefce8;border:1px solid #fde68a;border-radius:6px;font-size:9.5px;color:#92400e;}
-          .footer{margin-top:24px;padding-top:12px;border-top:1px solid #f3f4f6;display:flex;justify-content:space-between;}
-          .footer span{font-size:9px;color:#d1d5db;}
-        </style>
-        <div class="hdr">
-          <div class="lbl">Financial Summary</div>
-          <h1>${company}</h1>
-          <div class="meta">Generated ${new Date().toLocaleDateString("en-GB",{year:"numeric",month:"long",day:"numeric"})} · Powered by Claude</div>
+        <style>* { box-sizing:border-box; margin:0; padding:0; }</style>
+        <div style="background:linear-gradient(135deg,#1e1b4b 0%,#4f46e5 100%);padding:32px 36px 24px;border-radius:12px 12px 0 0;">
+          <div style="font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#a5b4fc;margin-bottom:8px;">Financial Summary</div>
+          <div style="font-size:26px;font-weight:800;color:#fff;margin-bottom:8px;">${company}</div>
+          <div style="font-size:10px;color:#c7d2fe;">Generated ${new Date().toLocaleDateString("en-GB",{year:"numeric",month:"long",day:"numeric"})}</div>
         </div>
-        <div class="body">
-          <div class="section-title">Key Performance Indicators</div>
-          ${kpiHtml}
-          ${trendImg || breakdownImg ? `
-          <div class="chart-pair">
-            ${trendImg ? `<div class="chart-box"><div class="chart-box-title">Revenue &amp; Profit Trend</div>${trendImg}</div>` : ""}
-            ${breakdownImg ? `<div class="chart-box"><div class="chart-box-title">Revenue Breakdown</div>${breakdownImg}</div>` : ""}
-          </div>` : ""}
-          ${growthImg ? `<div class="chart-box" style="margin-bottom:16px;"><div class="chart-box-title">Year-on-Year Revenue Growth</div>${growthImg}</div>` : ""}
-          <div class="section-title">AI Financial Analysis</div>
-          <div class="summary-text">${lastFinData.summary || ""}</div>
-          ${lastFinData.data_note ? `<div class="data-note">ℹ ${lastFinData.data_note}</div>` : ""}
-          <div class="footer">
-            <span>Powered by Claude · Company Research Tool</span>
-            <span>${new Date().toLocaleDateString("en-GB",{year:"numeric",month:"long",day:"numeric"})}</span>
+        <div style="background:#fff;padding:24px 36px 32px;border-radius:0 0 12px 12px;">
+          <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:24px;">${kpiHtml}</div>
+          <div style="margin-bottom:20px;">
+            <div style="font-size:10px;font-weight:700;color:#4f46e5;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;">Revenue &amp; Gross Profit</div>
+            ${getChartImg("fin-rev-chart")}
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+            <div>
+              <div style="font-size:10px;font-weight:700;color:#4f46e5;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">Operating Margin %</div>
+              ${getChartImg("fin-margin-chart")}
+            </div>
+            <div>
+              <div style="font-size:10px;font-weight:700;color:#4f46e5;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">Revenue Mix</div>
+              ${getChartImg("fin-donut-chart")}
+            </div>
+          </div>
+          <div style="border-top:1px solid #f3f4f6;padding-top:20px;">
+            <div style="font-size:10px;font-weight:700;color:#4f46e5;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;">Financial Analysis</div>
+            <div style="font-size:11px;line-height:1.75;color:#374151;">${narrative}</div>
           </div>
         </div>`;
 
@@ -2151,275 +2109,6 @@ ${lastReportMarkdown}`;
       this.innerHTML = '<i data-lucide="download" style="width:15px;height:15px;"></i> Export PDF';
       lucide.createIcons();
     });
-
-    // ── Next Steps ────────────────────────────────────────
-    function updateNsBanner() {
-      const banner = document.getElementById("ns-banner");
-      if (lastCompany && lastReportMarkdown) {
-        document.getElementById("ns-banner-company").textContent = lastCompany;
-        banner.style.display = "flex";
-      } else {
-        banner.style.display = "none";
-      }
-    }
-
-    function onNextStepsOpen() {
-      const label = document.getElementById("ns-company-label");
-      label.textContent = lastCompany
-        ? `Sales engagement plan for: ${lastCompany}`
-        : "Research a company first to generate sales engagement recommendations";
-      updateNsBanner();
-
-      if (lastNsData && lastNsCompany === lastCompany) {
-        document.getElementById("ns-empty").style.display   = "none";
-        document.getElementById("ns-loading").style.display = "none";
-        document.getElementById("ns-content").style.display = "block";
-        renderNextSteps(lastNsData);
-      } else {
-        document.getElementById("ns-empty").style.display   = "flex";
-        document.getElementById("ns-loading").style.display = "none";
-        document.getElementById("ns-content").style.display = "none";
-      }
-      lucide.createIcons();
-    }
-
-    document.getElementById("ns-generate-btn").addEventListener("click", async () => {
-      const apiKey = getApiKey();
-      if (!apiKey || !lastReportMarkdown) return;
-
-      const btn = document.getElementById("ns-generate-btn");
-      btn.disabled = true;
-      btn.textContent = "Generating…";
-
-      document.getElementById("ns-empty").style.display   = "none";
-      document.getElementById("ns-loading").style.display = "flex";
-      document.getElementById("ns-content").style.display = "none";
-
-      const prompt = `You are an expert enterprise software sales strategist. Based on the company research report below, generate a detailed, actionable sales engagement plan for a software vendor looking to sell to this company.
-
-Return ONLY valid JSON (no markdown fences) matching this exact schema:
-{
-  "immediate_actions": [
-    {"label": "Short action title", "detail": "Specific, actionable detail explaining what to do and why", "priority": "urgent"}
-  ],
-  "short_term_actions": [
-    {"label": "Short action title", "detail": "Specific, actionable detail", "priority": "medium"}
-  ],
-  "value_messages": [
-    {"heading": "Value proposition heading", "message": "Tailored message for this specific company's situation"}
-  ],
-  "stakeholders": [
-    {"title": "Job title or role", "description": "Why this person matters and how to approach them"}
-  ],
-  "outreach_strategy": "2-3 sentence paragraph recommending the best channel mix (email, LinkedIn, phone, events), timing, and tone for initial outreach to this company.",
-  "objections": [
-    {"question": "Likely objection or concern this company will raise", "response": "How to handle this objection effectively"}
-  ]
-}
-
-Rules:
-- immediate_actions: 3-4 items, priority = "urgent", things to do in the next 7 days
-- short_term_actions: 4-5 items, priority = "medium" or "low", things to do in the next 30-60 days
-- value_messages: 4-6 items, each tailored to a specific challenge or strategic priority visible in the report
-- stakeholders: 4-6 roles, specific to this company's structure and industry
-- objections: 4-5 realistic objections with practical responses
-- Be highly specific to this company — reference their actual business, industry, size, and challenges
-- Focus entirely on software sales tactics
-
-Report:
-${lastReportMarkdown}`;
-
-      try {
-        const res = await fetch("https://api.anthropic.com/v1/messages", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-api-key": apiKey,
-            "anthropic-version": "2023-06-01",
-            "anthropic-dangerous-direct-browser-access": "true",
-          },
-          body: JSON.stringify({
-            model: "claude-sonnet-4-6",
-            max_tokens: 2000,
-            messages: [{ role: "user", content: prompt }],
-          }),
-        });
-
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const json = await res.json();
-        const text = (json.content?.[0]?.text || "")
-          .replace(/^```[a-z]*\n?/, "").replace(/\n?```$/, "").trim();
-        const data = JSON.parse(text);
-        lastNsData    = data;
-        lastNsCompany = lastCompany;
-        renderNextSteps(data);
-      } catch (err) {
-        document.getElementById("ns-loading").style.display = "none";
-        document.getElementById("ns-empty").style.display   = "flex";
-        alert(`Could not generate next steps: ${err.message}`);
-      } finally {
-        btn.disabled = false;
-        btn.textContent = "Generate Next Steps";
-      }
-    });
-
-    function renderNextSteps(data) {
-      document.getElementById("ns-loading").style.display = "none";
-      document.getElementById("ns-content").style.display = "block";
-
-      const actionHtml = (items) => items.map(a => `
-        <div class="ns-action-item ${a.priority || 'medium'}">
-          <div class="ns-action-dot"></div>
-          <div>
-            <div class="ns-action-label">${a.label}</div>
-            <div class="ns-action-detail">${a.detail}</div>
-          </div>
-        </div>`).join("");
-
-      const messagesHtml = (data.value_messages || []).map(m => `
-        <div class="ns-message-item">
-          <div class="ns-message-heading">${m.heading}</div>
-          <p>${m.message}</p>
-        </div>`).join("");
-
-      const stakeholdersHtml = (data.stakeholders || []).map(s => `
-        <div class="ns-stakeholder-item">
-          <div class="ns-stakeholder-title">${s.title}</div>
-          <div class="ns-stakeholder-desc">${s.description}</div>
-        </div>`).join("");
-
-      const objectionsHtml = (data.objections || []).map(o => `
-        <div class="ns-objection-item">
-          <div class="ns-objection-q">"${o.question}"</div>
-          <div class="ns-objection-a">${o.response}</div>
-        </div>`).join("");
-
-      document.getElementById("ns-content").innerHTML = `
-        <div class="ns-section">
-          <div class="settings-section-title">Immediate Actions · This Week</div>
-          <div class="card ns-card">
-            <div class="ns-actions-list">${actionHtml(data.immediate_actions || [])}</div>
-          </div>
-        </div>
-
-        <div class="ns-section">
-          <div class="settings-section-title">30-Day Plan</div>
-          <div class="card ns-card">
-            <div class="ns-actions-list">${actionHtml(data.short_term_actions || [])}</div>
-          </div>
-        </div>
-
-        <div class="ns-section">
-          <div class="settings-section-title">Value Messaging</div>
-          <div class="card ns-card">
-            <div class="ns-message-grid">${messagesHtml}</div>
-          </div>
-        </div>
-
-        <div class="ns-section">
-          <div class="settings-section-title">Stakeholders to Target</div>
-          <div class="card ns-card">
-            <div class="ns-stakeholder-grid">${stakeholdersHtml}</div>
-          </div>
-        </div>
-
-        <div class="ns-section">
-          <div class="settings-section-title">Outreach Strategy</div>
-          <div class="card ns-card">
-            <p class="ns-strategy-text">${data.outreach_strategy || ""}</p>
-          </div>
-        </div>
-
-        <div class="ns-section">
-          <div class="settings-section-title">Objection Handling</div>
-          <div class="card ns-card">
-            <div class="ns-objection-list">${objectionsHtml}</div>
-          </div>
-        </div>
-
-        <div class="export-bar" style="max-width:900px; margin-bottom:20px;">
-          <button class="btn-export" id="export-ns-btn">
-            <i data-lucide="download" style="width:15px;height:15px;"></i> Export PDF
-          </button>
-        </div>`;
-
-      lucide.createIcons();
-
-      document.getElementById("export-ns-btn").addEventListener("click", async function () {
-        this.disabled = true;
-        this.innerHTML = '<i data-lucide="loader-2" style="width:15px;height:15px;"></i> Exporting…';
-        lucide.createIcons();
-
-        const company = lastNsCompany || "Company";
-        const d = lastNsData;
-
-        const actionPdfRows = (items) => items.map(a =>
-          `<div style="display:flex;gap:12px;padding:10px 14px;border-radius:8px;margin-bottom:8px;background:${a.priority==='urgent'?'#fef2f2':a.priority==='low'?'#f0fdf4':'#fffbeb'};border:1px solid ${a.priority==='urgent'?'#fecaca':a.priority==='low'?'#bbf7d0':'#fde68a'};">
-            <div style="width:8px;height:8px;border-radius:50%;background:${a.priority==='urgent'?'#ef4444':a.priority==='low'?'#10b981':'#f59e0b'};flex-shrink:0;margin-top:5px;"></div>
-            <div><div style="font-size:11px;font-weight:700;color:#1a1a2e;margin-bottom:3px;">${a.label}</div><div style="font-size:11px;line-height:1.6;color:#374151;">${a.detail}</div></div>
-          </div>`).join("");
-
-        const el = document.createElement("div");
-        el.style.cssText = "width:720px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#1a1a2e;";
-        el.innerHTML = `
-          <style>*{box-sizing:border-box;margin:0;padding:0;}
-          .hdr{background:linear-gradient(135deg,#1e1b4b,#4f46e5);padding:32px 36px 24px;border-radius:12px 12px 0 0;}
-          .hdr .lbl{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#a5b4fc;margin-bottom:8px;}
-          .hdr h1{font-size:26px;font-weight:800;color:#fff;margin-bottom:10px;}
-          .hdr .meta{font-size:10px;color:#c7d2fe;}
-          .body{padding:24px 36px 28px;background:#fff;border-radius:0 0 12px 12px;}
-          .sec{font-size:9px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:.08em;margin:20px 0 10px;}
-          .msg-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px;}
-          .msg-item{padding:12px 14px;background:#f8f9ff;border:1px solid #e0e7ff;border-left:3px solid #4f46e5;border-radius:8px;}
-          .msg-heading{font-size:10px;font-weight:700;color:#4f46e5;margin-bottom:4px;}
-          .msg-text{font-size:10.5px;line-height:1.6;color:#374151;}
-          .stkh-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
-          .stkh-item{padding:10px 12px;background:#fafafa;border:1px solid #e5e7eb;border-radius:8px;}
-          .stkh-title{font-size:10.5px;font-weight:700;color:#1a1a2e;margin-bottom:4px;}
-          .stkh-desc{font-size:10px;line-height:1.55;color:#6b7280;}
-          .obj-item{padding:10px 14px;background:#fafafa;border:1px solid #e5e7eb;border-radius:8px;margin-bottom:8px;}
-          .obj-q{font-size:10.5px;font-weight:700;color:#374151;margin-bottom:4px;}
-          .obj-a{font-size:10px;line-height:1.6;color:#6b7280;}
-          .strategy{font-size:11px;line-height:1.75;color:#374151;}
-          .footer{margin-top:24px;padding-top:12px;border-top:1px solid #f3f4f6;display:flex;justify-content:space-between;}
-          .footer span{font-size:9px;color:#d1d5db;}</style>
-          <div class="hdr">
-            <div class="lbl">Software Sales Next Steps</div>
-            <h1>${company}</h1>
-            <div class="meta">Generated ${new Date().toLocaleDateString("en-GB",{year:"numeric",month:"long",day:"numeric"})} · Powered by Claude</div>
-          </div>
-          <div class="body">
-            <div class="sec">Immediate Actions · This Week</div>
-            ${actionPdfRows(d.immediate_actions || [])}
-            <div class="sec">30-Day Plan</div>
-            ${actionPdfRows(d.short_term_actions || [])}
-            <div class="sec">Value Messaging</div>
-            <div class="msg-grid">${(d.value_messages||[]).map(m=>`<div class="msg-item"><div class="msg-heading">${m.heading}</div><div class="msg-text">${m.message}</div></div>`).join("")}</div>
-            <div class="sec">Stakeholders to Target</div>
-            <div class="stkh-grid" style="margin-bottom:8px;">${(d.stakeholders||[]).map(s=>`<div class="stkh-item"><div class="stkh-title">${s.title}</div><div class="stkh-desc">${s.description}</div></div>`).join("")}</div>
-            <div class="sec">Outreach Strategy</div>
-            <p class="strategy" style="margin-bottom:8px;">${d.outreach_strategy||""}</p>
-            <div class="sec">Objection Handling</div>
-            ${(d.objections||[]).map(o=>`<div class="obj-item"><div class="obj-q">"${o.question}"</div><div class="obj-a">${o.response}</div></div>`).join("")}
-            <div class="footer">
-              <span>Powered by Claude · Company Research Tool</span>
-              <span>${new Date().toLocaleDateString("en-GB",{year:"numeric",month:"long",day:"numeric"})}</span>
-            </div>
-          </div>`;
-
-        await html2pdf().set({
-          margin: 10,
-          filename: `${company} - Next Steps.pdf`,
-          jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
-          html2canvas: { scale: 2, useCORS: true, logging: false },
-          pagebreak: { mode: ["avoid-all", "css"] },
-        }).from(el).save();
-
-        this.disabled = false;
-        this.innerHTML = '<i data-lucide="download" style="width:15px;height:15px;"></i> Export PDF';
-        lucide.createIcons();
-      });
-    }
 
     // Settings PDF
     document.getElementById("export-settings-btn").addEventListener("click", async function () {
