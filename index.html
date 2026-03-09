@@ -416,12 +416,72 @@
     .btn-export:hover { background: #f3f4f6; border-color: #d1d5db; }
     .btn-export:disabled { opacity: 0.5; cursor: not-allowed; }
 
+    /* ── Financials view ─────────────────────────── */
+    #financials-view { max-width: 1000px; }
+
+    .fin-empty-state {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 80px 24px; color: #9ca3af; text-align: center; gap: 16px;
+    }
+    .fin-empty-state p { font-size: 0.95rem; max-width: 380px; line-height: 1.65; }
+
+    .fin-kpi-row {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 16px; width: 100%; margin-bottom: 20px;
+    }
+    .fin-kpi-card {
+      background: #fff; border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+      padding: 20px 22px;
+      border-top: 3px solid #4f46e5;
+    }
+    .fin-kpi-card.green  { border-top-color: #10b981; }
+    .fin-kpi-card.amber  { border-top-color: #f59e0b; }
+    .fin-kpi-card.purple { border-top-color: #7c3aed; }
+    .fin-kpi-label {
+      font-size: 0.7rem; font-weight: 700; color: #9ca3af;
+      text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;
+    }
+    .fin-kpi-value { font-size: 1.45rem; font-weight: 800; color: #1a1a2e; line-height: 1.1; }
+    .fin-kpi-sub   { font-size: 0.72rem; color: #9ca3af; margin-top: 5px; }
+
+    .fin-charts-row {
+      display: grid; grid-template-columns: 2fr 1fr;
+      gap: 20px; width: 100%; margin-bottom: 20px;
+    }
+    .fin-chart-panel { padding: 24px 28px; }
+    .fin-chart-title    { font-size: 0.88rem; font-weight: 700; color: #1a1a2e; margin-bottom: 3px; }
+    .fin-chart-subtitle { font-size: 0.75rem; color: #9ca3af; margin-bottom: 16px; }
+
+    .fin-summary-card { padding: 28px 32px; width: 100%; margin-bottom: 20px; }
+    .fin-summary-card h3 {
+      font-size: 0.75rem; font-weight: 700; color: #9ca3af;
+      text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px;
+    }
+    .fin-summary-text { font-size: 0.95rem; line-height: 1.75; color: #374151; }
+    .fin-data-note {
+      margin-top: 14px; padding: 10px 14px;
+      background: #fefce8; border: 1px solid #fde68a;
+      border-radius: 8px; font-size: 0.8rem; color: #92400e; display: none;
+    }
+
+    .fin-loading {
+      display: none; align-items: center; justify-content: center;
+      gap: 12px; padding: 60px 0; font-size: 0.9rem; color: #6b7280;
+    }
+
+    @media (max-width: 860px) {
+      .fin-kpi-row { grid-template-columns: repeat(2, 1fr); }
+      .fin-charts-row { grid-template-columns: 1fr; }
+    }
+
     @media (max-width: 640px) {
       #report-card { padding: 24px 20px; }
       #search-card { flex-direction: column; }
       #search-btn { width: 100%; }
       .form-grid-2, .form-grid-3 { grid-template-columns: 1fr; }
       .field.span-2 { grid-column: span 1; }
+      .fin-kpi-row { grid-template-columns: 1fr 1fr; }
     }
   </style>
 </head>
@@ -446,6 +506,11 @@
     <button class="nav-btn" data-view="landscape">
       <i data-lucide="layers" style="width:20px;height:20px;"></i>
       <span class="tooltip">Landscape</span>
+    </button>
+
+    <button class="nav-btn" data-view="financials">
+      <i data-lucide="trending-up" style="width:20px;height:20px;"></i>
+      <span class="tooltip">Financials</span>
     </button>
 
     <div class="nav-spacer"></div>
@@ -790,6 +855,80 @@
 
     </div>
 
+    <!-- ── Financials view ─────────────────────── -->
+    <div class="view" id="financials-view">
+      <div class="page-header">
+        <h1>Financial Summary</h1>
+        <p id="financials-company-label">Research a company first to generate a financial summary</p>
+      </div>
+
+      <!-- Generate banner -->
+      <div class="ai-banner" id="fin-banner" style="display:none; width:100%; max-width:1000px;">
+        <p><strong id="fin-banner-company"></strong> report is available. Generate an AI-powered financial summary with charts.</p>
+        <button class="btn-primary" id="fin-generate-btn" style="white-space:nowrap;">Analyse Financials</button>
+      </div>
+
+      <!-- Empty state -->
+      <div id="fin-empty" class="fin-empty-state">
+        <i data-lucide="bar-chart-2" style="width:52px;height:52px;color:#d1d5db;"></i>
+        <p>Research a company from the home page, then click <strong>Analyse Financials</strong> to see revenue trends, profit margins, and an AI financial breakdown.</p>
+      </div>
+
+      <!-- Loading -->
+      <div id="fin-loading" class="fin-loading">
+        <div class="spinner"></div>
+        Analysing financial data…
+      </div>
+
+      <!-- Content -->
+      <div id="fin-content" style="display:none; width:100%;">
+
+        <!-- KPI row -->
+        <div class="fin-kpi-row" id="fin-kpi-row"></div>
+
+        <!-- Trend + breakdown -->
+        <div class="fin-charts-row">
+          <div class="card fin-chart-panel">
+            <div class="fin-chart-title">Revenue &amp; Profit Trend</div>
+            <div class="fin-chart-subtitle" id="fin-trend-subtitle">Annual financial performance</div>
+            <div style="position:relative;height:220px;">
+              <canvas id="fin-trend-canvas"></canvas>
+            </div>
+          </div>
+          <div class="card fin-chart-panel">
+            <div class="fin-chart-title">Revenue Breakdown</div>
+            <div class="fin-chart-subtitle">By business segment</div>
+            <div style="position:relative;height:220px;">
+              <canvas id="fin-breakdown-canvas"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- YoY growth -->
+        <div class="card fin-chart-panel" style="margin-bottom:20px;">
+          <div class="fin-chart-title">Year-on-Year Revenue Growth</div>
+          <div class="fin-chart-subtitle">Annual growth rate (%)</div>
+          <div style="position:relative;height:170px;">
+            <canvas id="fin-growth-canvas"></canvas>
+          </div>
+        </div>
+
+        <!-- AI summary -->
+        <div class="card fin-summary-card">
+          <h3>AI Financial Analysis</h3>
+          <div class="fin-summary-text" id="fin-summary-text"></div>
+          <div class="fin-data-note" id="fin-data-note"></div>
+        </div>
+
+        <!-- Export -->
+        <div class="export-bar" style="max-width:1000px;">
+          <button class="btn-export" id="export-fin-btn">
+            <i data-lucide="download" style="width:15px;height:15px;"></i> Export PDF
+          </button>
+        </div>
+      </div>
+    </div>
+
     <div class="view" id="settings-view">
       <div class="page-header">
         <h1>Settings</h1>
@@ -917,6 +1056,7 @@ Be factual and concise. If certain information is not publicly known or verifiab
         btn.classList.add("active");
         document.getElementById(`${target}-view`).classList.add("active");
         if (target === "meeting-prep") onMeetingPrepOpen();
+        if (target === "financials")   onFinancialsOpen();
       });
     });
 
@@ -1158,7 +1298,10 @@ Be factual and concise. If certain information is not publicly known or verifiab
         // Store report for meeting prep
         lastCompany        = company;
         lastReportMarkdown = accumulated;
+        lastFinCompany     = "";   // reset so financials re-generates for new company
+        lastFinData        = null;
         updateAiBanner();
+        updateFinBanner();
         renderChart();
         document.getElementById("export-bar-home").style.display = "flex";
         lucide.createIcons();
@@ -1520,6 +1663,386 @@ const el = document.createElement("div");
         ${fieldHtml("Post-call Next Steps", val("prep-next-steps"))}`;
 
       await html2pdf().set({ ...PDF_OPTS, filename: `${company} - Meeting Prep.pdf` }).from(el).save();
+
+      this.disabled = false;
+      this.innerHTML = '<i data-lucide="download" style="width:15px;height:15px;"></i> Export PDF';
+      lucide.createIcons();
+    });
+
+    // ── Financials ────────────────────────────────────────
+    let finTrendChart     = null;
+    let finBreakdownChart = null;
+    let finGrowthChart    = null;
+    let lastFinCompany    = "";
+    let lastFinData       = null;
+
+    function updateFinBanner() {
+      const banner = document.getElementById("fin-banner");
+      if (lastCompany && lastReportMarkdown) {
+        document.getElementById("fin-banner-company").textContent = lastCompany;
+        banner.style.display = "flex";
+      } else {
+        banner.style.display = "none";
+      }
+    }
+
+    function onFinancialsOpen() {
+      const label = document.getElementById("financials-company-label");
+      label.textContent = lastCompany
+        ? `Financial summary for: ${lastCompany}`
+        : "Research a company first to generate a financial summary";
+      updateFinBanner();
+
+      if (lastFinData && lastFinCompany === lastCompany) {
+        document.getElementById("fin-empty").style.display   = "none";
+        document.getElementById("fin-loading").style.display = "none";
+        document.getElementById("fin-content").style.display = "block";
+        renderFinancials(lastFinData);
+      } else {
+        document.getElementById("fin-empty").style.display   = "flex";
+        document.getElementById("fin-loading").style.display = "none";
+        document.getElementById("fin-content").style.display = "none";
+      }
+      lucide.createIcons();
+    }
+
+    document.getElementById("fin-generate-btn").addEventListener("click", async () => {
+      const apiKey = getApiKey();
+      if (!apiKey || !lastReportMarkdown) return;
+
+      const btn = document.getElementById("fin-generate-btn");
+      btn.disabled = true;
+      btn.textContent = "Analysing…";
+
+      document.getElementById("fin-empty").style.display   = "none";
+      document.getElementById("fin-loading").style.display = "flex";
+      document.getElementById("fin-content").style.display = "none";
+
+      const prompt = `Based on this company research report, extract or estimate financial data and return a JSON object.
+
+Rules:
+- Use actual figures from the report where available
+- For private companies where exact figures are unavailable, provide realistic estimates based on company size, industry, and any hints in the report
+- All monetary values as numbers in £ millions (e.g. 1200 means £1,200m = £1.2bn)
+- Include the 5 most recent calendar years in trend_data and 4 most recent in growth_rates
+- If revenue segment breakdown is unknown, create plausible segments for the business model
+- Be specific and realistic — do not use placeholder zeros
+
+Return ONLY this JSON (no markdown fences):
+{
+  "kpis": {
+    "revenue": "£Xbn or £Xm",
+    "revenue_growth": "+X% or -X% YoY",
+    "operating_margin": "X.X%",
+    "headcount": "~X,XXX employees",
+    "market_cap_or_valuation": "£Xbn or 'Private'",
+    "listing": "LSE / AIM / Private"
+  },
+  "trend_data": [
+    {"year": 2020, "revenue_m": 0, "profit_m": 0, "margin_pct": 0}
+  ],
+  "revenue_breakdown": [
+    {"segment": "Name", "pct": 40}
+  ],
+  "growth_rates": [
+    {"year": 2021, "pct": 5.2},
+    {"year": 2022, "pct": 8.1},
+    {"year": 2023, "pct": 12.3},
+    {"year": 2024, "pct": 9.5}
+  ],
+  "summary": "3-4 sentence paragraph analysing the company's financial health, trajectory, key growth drivers, and any risks or challenges. Reference specific figures.",
+  "data_note": "Brief note on data sources and reliability. E.g. 'Revenue figures from Companies House filings; segment breakdown estimated.' or 'All figures are estimates as the company is privately held.'"
+}
+
+Report:
+${lastReportMarkdown}`;
+
+      try {
+        const res = await fetch("https://api.anthropic.com/v1/messages", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-api-key": apiKey,
+            "anthropic-version": "2023-06-01",
+            "anthropic-dangerous-direct-browser-access": "true",
+          },
+          body: JSON.stringify({
+            model: "claude-sonnet-4-6",
+            max_tokens: 1500,
+            messages: [{ role: "user", content: prompt }],
+          }),
+        });
+
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const json = await res.json();
+        const text = (json.content?.[0]?.text || "")
+          .replace(/^```[a-z]*\n?/, "").replace(/\n?```$/, "").trim();
+        const data = JSON.parse(text);
+        lastFinData    = data;
+        lastFinCompany = lastCompany;
+        renderFinancials(data);
+      } catch (err) {
+        document.getElementById("fin-loading").style.display = "none";
+        document.getElementById("fin-empty").style.display   = "flex";
+        alert(`Could not generate financial summary: ${err.message}`);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Analyse Financials";
+      }
+    });
+
+    function renderFinancials(data) {
+      document.getElementById("fin-loading").style.display = "none";
+      document.getElementById("fin-content").style.display = "block";
+
+      // ── KPI cards ──────────────────────────────────────
+      const kpis = data.kpis || {};
+      const isListed = kpis.listing && kpis.listing !== "Private";
+      document.getElementById("fin-kpi-row").innerHTML = `
+        <div class="fin-kpi-card">
+          <div class="fin-kpi-label">Revenue</div>
+          <div class="fin-kpi-value">${kpis.revenue || "—"}</div>
+          <div class="fin-kpi-sub">Most recent year</div>
+        </div>
+        <div class="fin-kpi-card green">
+          <div class="fin-kpi-label">Revenue Growth</div>
+          <div class="fin-kpi-value">${kpis.revenue_growth || "—"}</div>
+          <div class="fin-kpi-sub">Year-on-year</div>
+        </div>
+        <div class="fin-kpi-card amber">
+          <div class="fin-kpi-label">Operating Margin</div>
+          <div class="fin-kpi-value">${kpis.operating_margin || "—"}</div>
+          <div class="fin-kpi-sub">Operating profit / revenue</div>
+        </div>
+        <div class="fin-kpi-card purple">
+          <div class="fin-kpi-label">${isListed ? "Market Cap" : "Valuation / Status"}</div>
+          <div class="fin-kpi-value">${kpis.market_cap_or_valuation || "—"}</div>
+          <div class="fin-kpi-sub">${kpis.listing || ""} · ${kpis.headcount || ""}</div>
+        </div>`;
+
+      // ── Trend chart ─────────────────────────────────────
+      const trendData = data.trend_data || [];
+      if (finTrendChart) { finTrendChart.destroy(); finTrendChart = null; }
+      if (trendData.length) {
+        const ctx = document.getElementById("fin-trend-canvas").getContext("2d");
+        finTrendChart = new Chart(ctx, {
+          data: {
+            labels: trendData.map(d => d.year),
+            datasets: [
+              {
+                type: "bar", label: "Revenue",
+                data: trendData.map(d => d.revenue_m),
+                backgroundColor: "rgba(79,70,229,0.82)",
+                borderRadius: 5, borderSkipped: false,
+                yAxisID: "yLeft", order: 2,
+              },
+              {
+                type: "bar", label: "Operating Profit",
+                data: trendData.map(d => d.profit_m),
+                backgroundColor: "rgba(165,180,252,0.78)",
+                borderRadius: 5, borderSkipped: false,
+                yAxisID: "yLeft", order: 3,
+              },
+              {
+                type: "line", label: "Margin %",
+                data: trendData.map(d => d.margin_pct),
+                borderColor: "#f59e0b", backgroundColor: "rgba(245,158,11,0.06)",
+                borderWidth: 2.5,
+                pointBackgroundColor: "#f59e0b", pointBorderColor: "#fff", pointBorderWidth: 2,
+                pointRadius: 4, tension: 0.4, fill: false,
+                yAxisID: "yRight", order: 1,
+              },
+            ],
+          },
+          options: {
+            responsive: true, maintainAspectRatio: false,
+            interaction: { mode: "index", intersect: false },
+            plugins: {
+              legend: { display: true, position: "top", labels: { boxWidth: 11, font: { size: 11 }, padding: 14 } },
+              tooltip: {
+                backgroundColor: "#1e1b4b", titleColor: "#e0e7ff", bodyColor: "#c7d2fe",
+                padding: 10, cornerRadius: 8,
+                callbacks: {
+                  label: c => c.dataset.yAxisID === "yRight"
+                    ? ` ${c.dataset.label}: ${c.parsed.y}%`
+                    : ` ${c.dataset.label}: £${c.parsed.y}m`,
+                },
+              },
+            },
+            scales: {
+              x: { grid: { display: false }, ticks: { font: { size: 11 }, color: "#6b7280" }, border: { display: false } },
+              yLeft: {
+                position: "left", grid: { color: "#f3f4f6" }, border: { display: false },
+                beginAtZero: true,
+                ticks: { font: { size: 10 }, color: "#9ca3af", callback: v => `£${v}m` },
+              },
+              yRight: {
+                position: "right", grid: { drawOnChartArea: false }, border: { display: false },
+                beginAtZero: true,
+                ticks: { font: { size: 10 }, color: "#f59e0b", callback: v => `${v}%` },
+              },
+            },
+          },
+        });
+      }
+
+      // ── Breakdown donut ─────────────────────────────────
+      const breakdownData = data.revenue_breakdown || [];
+      if (finBreakdownChart) { finBreakdownChart.destroy(); finBreakdownChart = null; }
+      if (breakdownData.length) {
+        const palette = ["#4f46e5","#7c3aed","#06b6d4","#10b981","#f59e0b","#ef4444","#ec4899"];
+        const ctx = document.getElementById("fin-breakdown-canvas").getContext("2d");
+        finBreakdownChart = new Chart(ctx, {
+          type: "doughnut",
+          data: {
+            labels: breakdownData.map(d => d.segment),
+            datasets: [{
+              data: breakdownData.map(d => d.pct),
+              backgroundColor: palette.slice(0, breakdownData.length),
+              borderWidth: 2, borderColor: "#fff",
+            }],
+          },
+          options: {
+            responsive: true, maintainAspectRatio: false,
+            cutout: "65%",
+            plugins: {
+              legend: { position: "bottom", labels: { boxWidth: 10, font: { size: 10 }, padding: 8 } },
+              tooltip: {
+                backgroundColor: "#1e1b4b", titleColor: "#e0e7ff", bodyColor: "#c7d2fe",
+                callbacks: { label: c => ` ${c.label}: ${c.raw}%` },
+              },
+            },
+          },
+        });
+      }
+
+      // ── Growth bars ─────────────────────────────────────
+      const growthData = data.growth_rates || [];
+      if (finGrowthChart) { finGrowthChart.destroy(); finGrowthChart = null; }
+      if (growthData.length) {
+        const ctx = document.getElementById("fin-growth-canvas").getContext("2d");
+        finGrowthChart = new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels: growthData.map(d => d.year),
+            datasets: [{
+              label: "YoY Growth %",
+              data: growthData.map(d => d.pct),
+              backgroundColor: growthData.map(d => d.pct >= 0 ? "rgba(16,185,129,0.82)" : "rgba(239,68,68,0.82)"),
+              borderRadius: 5, borderSkipped: false,
+            }],
+          },
+          options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                backgroundColor: "#1e1b4b", titleColor: "#e0e7ff", bodyColor: "#c7d2fe",
+                callbacks: { label: c => ` Growth: ${c.parsed.y > 0 ? "+" : ""}${c.parsed.y}%` },
+              },
+            },
+            scales: {
+              x: { grid: { display: false }, ticks: { font: { size: 11 }, color: "#6b7280" }, border: { display: false } },
+              y: {
+                grid: { color: "#f3f4f6" }, border: { display: false },
+                ticks: { font: { size: 10 }, color: "#9ca3af", callback: v => `${v > 0 ? "+" : ""}${v}%` },
+              },
+            },
+          },
+        });
+      }
+
+      // ── Summary ─────────────────────────────────────────
+      document.getElementById("fin-summary-text").textContent = data.summary || "";
+      const noteEl = document.getElementById("fin-data-note");
+      if (data.data_note) {
+        noteEl.textContent = "ℹ " + data.data_note;
+        noteEl.style.display = "block";
+      } else {
+        noteEl.style.display = "none";
+      }
+      lucide.createIcons();
+    }
+
+    // Financials PDF export
+    document.getElementById("export-fin-btn").addEventListener("click", async function () {
+      if (!lastFinData) return;
+      this.disabled = true;
+      this.innerHTML = '<i data-lucide="loader-2" style="width:15px;height:15px;"></i> Exporting…';
+      lucide.createIcons();
+
+      const company = lastFinCompany || "Company";
+      const kpis    = lastFinData.kpis || {};
+
+      // Capture charts as images
+      const trendImg     = finTrendChart     ? `<img src="${document.getElementById("fin-trend-canvas").toDataURL("image/png")}" style="width:100%;border-radius:8px;" />` : "";
+      const breakdownImg = finBreakdownChart ? `<img src="${document.getElementById("fin-breakdown-canvas").toDataURL("image/png")}" style="width:100%;border-radius:8px;" />` : "";
+      const growthImg    = finGrowthChart    ? `<img src="${document.getElementById("fin-growth-canvas").toDataURL("image/png")}" style="width:100%;border-radius:8px;" />` : "";
+
+      const kpiHtml = `
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;">
+          ${[
+            ["Revenue", kpis.revenue || "—", "Most recent year", "#4f46e5"],
+            ["Revenue Growth", kpis.revenue_growth || "—", "Year-on-year", "#10b981"],
+            ["Operating Margin", kpis.operating_margin || "—", "Op profit / revenue", "#f59e0b"],
+            [kpis.listing !== "Private" ? "Market Cap" : "Status", kpis.market_cap_or_valuation || "—", (kpis.listing || "") + " · " + (kpis.headcount || ""), "#7c3aed"],
+          ].map(([label, value, sub, color]) => `
+            <div style="border-top:3px solid ${color};background:#fafafa;border-radius:8px;padding:14px 16px;">
+              <div style="font-size:9px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;">${label}</div>
+              <div style="font-size:18px;font-weight:800;color:#1a1a2e;">${value}</div>
+              <div style="font-size:10px;color:#9ca3af;margin-top:4px;">${sub}</div>
+            </div>`).join("")}
+        </div>`;
+
+      const el = document.createElement("div");
+      el.style.cssText = "width:720px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#1a1a2e;";
+      el.innerHTML = `
+        <style>
+          *{box-sizing:border-box;margin:0;padding:0;}
+          .hdr{background:linear-gradient(135deg,#1e1b4b,#4f46e5);padding:32px 36px 24px;border-radius:12px 12px 0 0;}
+          .hdr .lbl{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#a5b4fc;margin-bottom:8px;}
+          .hdr h1{font-size:26px;font-weight:800;color:#fff;margin-bottom:10px;}
+          .hdr .meta{font-size:10px;color:#c7d2fe;}
+          .body{padding:24px 36px 28px;background:#fff;border-radius:0 0 12px 12px;}
+          .section-title{font-size:9px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:.08em;margin:20px 0 10px;}
+          .chart-pair{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:16px;}
+          .chart-box{background:#f8f9ff;border:1px solid #e0e7ff;border-radius:8px;padding:14px;}
+          .chart-box-title{font-size:10px;font-weight:700;color:#4f46e5;margin-bottom:8px;}
+          .summary-text{font-size:11px;line-height:1.75;color:#374151;}
+          .data-note{margin-top:10px;padding:8px 12px;background:#fefce8;border:1px solid #fde68a;border-radius:6px;font-size:9.5px;color:#92400e;}
+          .footer{margin-top:24px;padding-top:12px;border-top:1px solid #f3f4f6;display:flex;justify-content:space-between;}
+          .footer span{font-size:9px;color:#d1d5db;}
+        </style>
+        <div class="hdr">
+          <div class="lbl">Financial Summary</div>
+          <h1>${company}</h1>
+          <div class="meta">Generated ${new Date().toLocaleDateString("en-GB",{year:"numeric",month:"long",day:"numeric"})} · Powered by Claude</div>
+        </div>
+        <div class="body">
+          <div class="section-title">Key Performance Indicators</div>
+          ${kpiHtml}
+          ${trendImg || breakdownImg ? `
+          <div class="chart-pair">
+            ${trendImg ? `<div class="chart-box"><div class="chart-box-title">Revenue &amp; Profit Trend</div>${trendImg}</div>` : ""}
+            ${breakdownImg ? `<div class="chart-box"><div class="chart-box-title">Revenue Breakdown</div>${breakdownImg}</div>` : ""}
+          </div>` : ""}
+          ${growthImg ? `<div class="chart-box" style="margin-bottom:16px;"><div class="chart-box-title">Year-on-Year Revenue Growth</div>${growthImg}</div>` : ""}
+          <div class="section-title">AI Financial Analysis</div>
+          <div class="summary-text">${lastFinData.summary || ""}</div>
+          ${lastFinData.data_note ? `<div class="data-note">ℹ ${lastFinData.data_note}</div>` : ""}
+          <div class="footer">
+            <span>Powered by Claude · Company Research Tool</span>
+            <span>${new Date().toLocaleDateString("en-GB",{year:"numeric",month:"long",day:"numeric"})}</span>
+          </div>
+        </div>`;
+
+      await html2pdf().set({
+        margin: 10,
+        filename: `${company} - Financial Summary.pdf`,
+        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+        html2canvas: { scale: 2, useCORS: true, logging: false },
+        pagebreak: { mode: ["avoid-all", "css"] },
+      }).from(el).save();
 
       this.disabled = false;
       this.innerHTML = '<i data-lucide="download" style="width:15px;height:15px;"></i> Export PDF';
