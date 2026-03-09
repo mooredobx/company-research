@@ -483,6 +483,73 @@
       .field.span-2 { grid-column: span 1; }
       .fin-kpi-row { grid-template-columns: 1fr 1fr; }
     }
+
+    /* ── Next Steps view ─────────────────────────── */
+    #next-steps-view { max-width: 900px; }
+
+    .ns-empty-state {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 80px 24px; color: #9ca3af; text-align: center; gap: 16px;
+    }
+    .ns-empty-state p { font-size: 0.95rem; max-width: 400px; line-height: 1.65; }
+
+    .ns-loading {
+      display: none; align-items: center; justify-content: center;
+      gap: 12px; padding: 60px 0; font-size: 0.9rem; color: #6b7280;
+    }
+
+    .ns-section { width: 100%; margin-bottom: 20px; }
+    .ns-card { padding: 24px 28px; }
+    .ns-card-title {
+      font-size: 0.75rem; font-weight: 700; color: #9ca3af;
+      text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 16px;
+    }
+
+    .ns-actions-list { display: flex; flex-direction: column; gap: 10px; }
+    .ns-action-item {
+      display: flex; gap: 14px; align-items: flex-start;
+      padding: 14px 16px; border-radius: 10px;
+    }
+    .ns-action-item.urgent { background: #fef2f2; border: 1px solid #fecaca; }
+    .ns-action-item.medium { background: #fffbeb; border: 1px solid #fde68a; }
+    .ns-action-item.low    { background: #f0fdf4; border: 1px solid #bbf7d0; }
+    .ns-action-dot {
+      width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; margin-top: 6px;
+    }
+    .ns-action-item.urgent .ns-action-dot { background: #ef4444; }
+    .ns-action-item.medium .ns-action-dot { background: #f59e0b; }
+    .ns-action-item.low    .ns-action-dot { background: #10b981; }
+    .ns-action-label { font-size: 0.82rem; font-weight: 700; color: #1a1a2e; margin-bottom: 3px; }
+    .ns-action-detail { font-size: 0.87rem; line-height: 1.6; color: #374151; }
+
+    .ns-message-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .ns-message-item {
+      padding: 16px 18px; background: #f8f9ff; border: 1px solid #e0e7ff;
+      border-radius: 10px; border-left: 3px solid #4f46e5;
+    }
+    .ns-message-heading { font-size: 0.82rem; font-weight: 700; color: #4f46e5; margin-bottom: 6px; }
+    .ns-message-item p { font-size: 0.88rem; line-height: 1.6; color: #374151; }
+
+    .ns-stakeholder-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .ns-stakeholder-item {
+      padding: 14px 16px; background: #fafafa; border: 1px solid #e5e7eb; border-radius: 10px;
+    }
+    .ns-stakeholder-title { font-size: 0.88rem; font-weight: 700; color: #1a1a2e; margin-bottom: 5px; }
+    .ns-stakeholder-desc { font-size: 0.83rem; line-height: 1.55; color: #6b7280; }
+
+    .ns-strategy-text { font-size: 0.95rem; line-height: 1.75; color: #374151; }
+
+    .ns-objection-list { display: flex; flex-direction: column; gap: 12px; }
+    .ns-objection-item {
+      padding: 14px 18px; background: #fafafa; border: 1px solid #e5e7eb; border-radius: 10px;
+    }
+    .ns-objection-q { font-size: 0.88rem; font-weight: 700; color: #374151; margin-bottom: 5px; }
+    .ns-objection-a { font-size: 0.87rem; line-height: 1.6; color: #6b7280; }
+
+    @media (max-width: 700px) {
+      .ns-message-grid { grid-template-columns: 1fr; }
+      .ns-stakeholder-grid { grid-template-columns: 1fr 1fr; }
+    }
   </style>
 </head>
 <body>
@@ -511,6 +578,11 @@
     <button class="nav-btn" data-view="financials">
       <i data-lucide="trending-up" style="width:20px;height:20px;"></i>
       <span class="tooltip">Financials</span>
+    </button>
+
+    <button class="nav-btn" data-view="next-steps">
+      <i data-lucide="target" style="width:20px;height:20px;"></i>
+      <span class="tooltip">Next Steps</span>
     </button>
 
     <div class="nav-spacer"></div>
@@ -929,6 +1001,31 @@
       </div>
     </div>
 
+    <!-- ── Next Steps view ───────────────────────── -->
+    <div class="view" id="next-steps-view">
+      <div class="page-header">
+        <h1>Next Steps</h1>
+        <p id="ns-company-label">Research a company first to generate sales engagement recommendations</p>
+      </div>
+
+      <div class="ai-banner" id="ns-banner" style="display:none; width:100%; max-width:900px;">
+        <p><strong id="ns-banner-company"></strong> report is available. Generate AI-powered next steps for your software sales engagement.</p>
+        <button class="btn-primary" id="ns-generate-btn" style="white-space:nowrap;">Generate Next Steps</button>
+      </div>
+
+      <div id="ns-empty" class="ns-empty-state">
+        <i data-lucide="target" style="width:52px;height:52px;color:#d1d5db;"></i>
+        <p>Research a company from the home page, then click <strong>Generate Next Steps</strong> to get AI-powered software sales engagement recommendations.</p>
+      </div>
+
+      <div id="ns-loading" class="ns-loading">
+        <div class="spinner"></div>
+        Generating next steps…
+      </div>
+
+      <div id="ns-content" style="display:none; width:100%;"></div>
+    </div>
+
     <div class="view" id="settings-view">
       <div class="page-header">
         <h1>Settings</h1>
@@ -1044,8 +1141,10 @@ Notable news, acquisitions, partnerships, or strategic moves from the past year 
 Be factual and concise. If certain information is not publicly known or verifiable, say so rather than speculating.`;
 
     // ── State ─────────────────────────────────────────────
-    let lastCompany      = "";
+    let lastCompany        = "";
     let lastReportMarkdown = "";
+    let lastNsCompany      = "";
+    let lastNsData         = null;
 
     // ── Navigation ───────────────────────────────────────
     document.querySelectorAll(".nav-btn[data-view]").forEach(btn => {
@@ -1057,6 +1156,7 @@ Be factual and concise. If certain information is not publicly known or verifiab
         document.getElementById(`${target}-view`).classList.add("active");
         if (target === "meeting-prep") onMeetingPrepOpen();
         if (target === "financials")   onFinancialsOpen();
+        if (target === "next-steps")   onNextStepsOpen();
       });
     });
 
@@ -1300,8 +1400,11 @@ Be factual and concise. If certain information is not publicly known or verifiab
         lastReportMarkdown = accumulated;
         lastFinCompany     = "";   // reset so financials re-generates for new company
         lastFinData        = null;
+        lastNsCompany      = "";   // reset so next steps re-generates for new company
+        lastNsData         = null;
         updateAiBanner();
         updateFinBanner();
+        updateNsBanner();
         renderChart();
         document.getElementById("export-bar-home").style.display = "flex";
         lucide.createIcons();
@@ -2048,6 +2151,275 @@ ${lastReportMarkdown}`;
       this.innerHTML = '<i data-lucide="download" style="width:15px;height:15px;"></i> Export PDF';
       lucide.createIcons();
     });
+
+    // ── Next Steps ────────────────────────────────────────
+    function updateNsBanner() {
+      const banner = document.getElementById("ns-banner");
+      if (lastCompany && lastReportMarkdown) {
+        document.getElementById("ns-banner-company").textContent = lastCompany;
+        banner.style.display = "flex";
+      } else {
+        banner.style.display = "none";
+      }
+    }
+
+    function onNextStepsOpen() {
+      const label = document.getElementById("ns-company-label");
+      label.textContent = lastCompany
+        ? `Sales engagement plan for: ${lastCompany}`
+        : "Research a company first to generate sales engagement recommendations";
+      updateNsBanner();
+
+      if (lastNsData && lastNsCompany === lastCompany) {
+        document.getElementById("ns-empty").style.display   = "none";
+        document.getElementById("ns-loading").style.display = "none";
+        document.getElementById("ns-content").style.display = "block";
+        renderNextSteps(lastNsData);
+      } else {
+        document.getElementById("ns-empty").style.display   = "flex";
+        document.getElementById("ns-loading").style.display = "none";
+        document.getElementById("ns-content").style.display = "none";
+      }
+      lucide.createIcons();
+    }
+
+    document.getElementById("ns-generate-btn").addEventListener("click", async () => {
+      const apiKey = getApiKey();
+      if (!apiKey || !lastReportMarkdown) return;
+
+      const btn = document.getElementById("ns-generate-btn");
+      btn.disabled = true;
+      btn.textContent = "Generating…";
+
+      document.getElementById("ns-empty").style.display   = "none";
+      document.getElementById("ns-loading").style.display = "flex";
+      document.getElementById("ns-content").style.display = "none";
+
+      const prompt = `You are an expert enterprise software sales strategist. Based on the company research report below, generate a detailed, actionable sales engagement plan for a software vendor looking to sell to this company.
+
+Return ONLY valid JSON (no markdown fences) matching this exact schema:
+{
+  "immediate_actions": [
+    {"label": "Short action title", "detail": "Specific, actionable detail explaining what to do and why", "priority": "urgent"}
+  ],
+  "short_term_actions": [
+    {"label": "Short action title", "detail": "Specific, actionable detail", "priority": "medium"}
+  ],
+  "value_messages": [
+    {"heading": "Value proposition heading", "message": "Tailored message for this specific company's situation"}
+  ],
+  "stakeholders": [
+    {"title": "Job title or role", "description": "Why this person matters and how to approach them"}
+  ],
+  "outreach_strategy": "2-3 sentence paragraph recommending the best channel mix (email, LinkedIn, phone, events), timing, and tone for initial outreach to this company.",
+  "objections": [
+    {"question": "Likely objection or concern this company will raise", "response": "How to handle this objection effectively"}
+  ]
+}
+
+Rules:
+- immediate_actions: 3-4 items, priority = "urgent", things to do in the next 7 days
+- short_term_actions: 4-5 items, priority = "medium" or "low", things to do in the next 30-60 days
+- value_messages: 4-6 items, each tailored to a specific challenge or strategic priority visible in the report
+- stakeholders: 4-6 roles, specific to this company's structure and industry
+- objections: 4-5 realistic objections with practical responses
+- Be highly specific to this company — reference their actual business, industry, size, and challenges
+- Focus entirely on software sales tactics
+
+Report:
+${lastReportMarkdown}`;
+
+      try {
+        const res = await fetch("https://api.anthropic.com/v1/messages", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-api-key": apiKey,
+            "anthropic-version": "2023-06-01",
+            "anthropic-dangerous-direct-browser-access": "true",
+          },
+          body: JSON.stringify({
+            model: "claude-sonnet-4-6",
+            max_tokens: 2000,
+            messages: [{ role: "user", content: prompt }],
+          }),
+        });
+
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const json = await res.json();
+        const text = (json.content?.[0]?.text || "")
+          .replace(/^```[a-z]*\n?/, "").replace(/\n?```$/, "").trim();
+        const data = JSON.parse(text);
+        lastNsData    = data;
+        lastNsCompany = lastCompany;
+        renderNextSteps(data);
+      } catch (err) {
+        document.getElementById("ns-loading").style.display = "none";
+        document.getElementById("ns-empty").style.display   = "flex";
+        alert(`Could not generate next steps: ${err.message}`);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Generate Next Steps";
+      }
+    });
+
+    function renderNextSteps(data) {
+      document.getElementById("ns-loading").style.display = "none";
+      document.getElementById("ns-content").style.display = "block";
+
+      const actionHtml = (items) => items.map(a => `
+        <div class="ns-action-item ${a.priority || 'medium'}">
+          <div class="ns-action-dot"></div>
+          <div>
+            <div class="ns-action-label">${a.label}</div>
+            <div class="ns-action-detail">${a.detail}</div>
+          </div>
+        </div>`).join("");
+
+      const messagesHtml = (data.value_messages || []).map(m => `
+        <div class="ns-message-item">
+          <div class="ns-message-heading">${m.heading}</div>
+          <p>${m.message}</p>
+        </div>`).join("");
+
+      const stakeholdersHtml = (data.stakeholders || []).map(s => `
+        <div class="ns-stakeholder-item">
+          <div class="ns-stakeholder-title">${s.title}</div>
+          <div class="ns-stakeholder-desc">${s.description}</div>
+        </div>`).join("");
+
+      const objectionsHtml = (data.objections || []).map(o => `
+        <div class="ns-objection-item">
+          <div class="ns-objection-q">"${o.question}"</div>
+          <div class="ns-objection-a">${o.response}</div>
+        </div>`).join("");
+
+      document.getElementById("ns-content").innerHTML = `
+        <div class="ns-section">
+          <div class="settings-section-title">Immediate Actions · This Week</div>
+          <div class="card ns-card">
+            <div class="ns-actions-list">${actionHtml(data.immediate_actions || [])}</div>
+          </div>
+        </div>
+
+        <div class="ns-section">
+          <div class="settings-section-title">30-Day Plan</div>
+          <div class="card ns-card">
+            <div class="ns-actions-list">${actionHtml(data.short_term_actions || [])}</div>
+          </div>
+        </div>
+
+        <div class="ns-section">
+          <div class="settings-section-title">Value Messaging</div>
+          <div class="card ns-card">
+            <div class="ns-message-grid">${messagesHtml}</div>
+          </div>
+        </div>
+
+        <div class="ns-section">
+          <div class="settings-section-title">Stakeholders to Target</div>
+          <div class="card ns-card">
+            <div class="ns-stakeholder-grid">${stakeholdersHtml}</div>
+          </div>
+        </div>
+
+        <div class="ns-section">
+          <div class="settings-section-title">Outreach Strategy</div>
+          <div class="card ns-card">
+            <p class="ns-strategy-text">${data.outreach_strategy || ""}</p>
+          </div>
+        </div>
+
+        <div class="ns-section">
+          <div class="settings-section-title">Objection Handling</div>
+          <div class="card ns-card">
+            <div class="ns-objection-list">${objectionsHtml}</div>
+          </div>
+        </div>
+
+        <div class="export-bar" style="max-width:900px; margin-bottom:20px;">
+          <button class="btn-export" id="export-ns-btn">
+            <i data-lucide="download" style="width:15px;height:15px;"></i> Export PDF
+          </button>
+        </div>`;
+
+      lucide.createIcons();
+
+      document.getElementById("export-ns-btn").addEventListener("click", async function () {
+        this.disabled = true;
+        this.innerHTML = '<i data-lucide="loader-2" style="width:15px;height:15px;"></i> Exporting…';
+        lucide.createIcons();
+
+        const company = lastNsCompany || "Company";
+        const d = lastNsData;
+
+        const actionPdfRows = (items) => items.map(a =>
+          `<div style="display:flex;gap:12px;padding:10px 14px;border-radius:8px;margin-bottom:8px;background:${a.priority==='urgent'?'#fef2f2':a.priority==='low'?'#f0fdf4':'#fffbeb'};border:1px solid ${a.priority==='urgent'?'#fecaca':a.priority==='low'?'#bbf7d0':'#fde68a'};">
+            <div style="width:8px;height:8px;border-radius:50%;background:${a.priority==='urgent'?'#ef4444':a.priority==='low'?'#10b981':'#f59e0b'};flex-shrink:0;margin-top:5px;"></div>
+            <div><div style="font-size:11px;font-weight:700;color:#1a1a2e;margin-bottom:3px;">${a.label}</div><div style="font-size:11px;line-height:1.6;color:#374151;">${a.detail}</div></div>
+          </div>`).join("");
+
+        const el = document.createElement("div");
+        el.style.cssText = "width:720px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#1a1a2e;";
+        el.innerHTML = `
+          <style>*{box-sizing:border-box;margin:0;padding:0;}
+          .hdr{background:linear-gradient(135deg,#1e1b4b,#4f46e5);padding:32px 36px 24px;border-radius:12px 12px 0 0;}
+          .hdr .lbl{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#a5b4fc;margin-bottom:8px;}
+          .hdr h1{font-size:26px;font-weight:800;color:#fff;margin-bottom:10px;}
+          .hdr .meta{font-size:10px;color:#c7d2fe;}
+          .body{padding:24px 36px 28px;background:#fff;border-radius:0 0 12px 12px;}
+          .sec{font-size:9px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:.08em;margin:20px 0 10px;}
+          .msg-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px;}
+          .msg-item{padding:12px 14px;background:#f8f9ff;border:1px solid #e0e7ff;border-left:3px solid #4f46e5;border-radius:8px;}
+          .msg-heading{font-size:10px;font-weight:700;color:#4f46e5;margin-bottom:4px;}
+          .msg-text{font-size:10.5px;line-height:1.6;color:#374151;}
+          .stkh-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+          .stkh-item{padding:10px 12px;background:#fafafa;border:1px solid #e5e7eb;border-radius:8px;}
+          .stkh-title{font-size:10.5px;font-weight:700;color:#1a1a2e;margin-bottom:4px;}
+          .stkh-desc{font-size:10px;line-height:1.55;color:#6b7280;}
+          .obj-item{padding:10px 14px;background:#fafafa;border:1px solid #e5e7eb;border-radius:8px;margin-bottom:8px;}
+          .obj-q{font-size:10.5px;font-weight:700;color:#374151;margin-bottom:4px;}
+          .obj-a{font-size:10px;line-height:1.6;color:#6b7280;}
+          .strategy{font-size:11px;line-height:1.75;color:#374151;}
+          .footer{margin-top:24px;padding-top:12px;border-top:1px solid #f3f4f6;display:flex;justify-content:space-between;}
+          .footer span{font-size:9px;color:#d1d5db;}</style>
+          <div class="hdr">
+            <div class="lbl">Software Sales Next Steps</div>
+            <h1>${company}</h1>
+            <div class="meta">Generated ${new Date().toLocaleDateString("en-GB",{year:"numeric",month:"long",day:"numeric"})} · Powered by Claude</div>
+          </div>
+          <div class="body">
+            <div class="sec">Immediate Actions · This Week</div>
+            ${actionPdfRows(d.immediate_actions || [])}
+            <div class="sec">30-Day Plan</div>
+            ${actionPdfRows(d.short_term_actions || [])}
+            <div class="sec">Value Messaging</div>
+            <div class="msg-grid">${(d.value_messages||[]).map(m=>`<div class="msg-item"><div class="msg-heading">${m.heading}</div><div class="msg-text">${m.message}</div></div>`).join("")}</div>
+            <div class="sec">Stakeholders to Target</div>
+            <div class="stkh-grid" style="margin-bottom:8px;">${(d.stakeholders||[]).map(s=>`<div class="stkh-item"><div class="stkh-title">${s.title}</div><div class="stkh-desc">${s.description}</div></div>`).join("")}</div>
+            <div class="sec">Outreach Strategy</div>
+            <p class="strategy" style="margin-bottom:8px;">${d.outreach_strategy||""}</p>
+            <div class="sec">Objection Handling</div>
+            ${(d.objections||[]).map(o=>`<div class="obj-item"><div class="obj-q">"${o.question}"</div><div class="obj-a">${o.response}</div></div>`).join("")}
+            <div class="footer">
+              <span>Powered by Claude · Company Research Tool</span>
+              <span>${new Date().toLocaleDateString("en-GB",{year:"numeric",month:"long",day:"numeric"})}</span>
+            </div>
+          </div>`;
+
+        await html2pdf().set({
+          margin: 10,
+          filename: `${company} - Next Steps.pdf`,
+          jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+          html2canvas: { scale: 2, useCORS: true, logging: false },
+          pagebreak: { mode: ["avoid-all", "css"] },
+        }).from(el).save();
+
+        this.disabled = false;
+        this.innerHTML = '<i data-lucide="download" style="width:15px;height:15px;"></i> Export PDF';
+        lucide.createIcons();
+      });
+    }
 
     // Settings PDF
     document.getElementById("export-settings-btn").addEventListener("click", async function () {
