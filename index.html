@@ -330,6 +330,76 @@
       justify-content: flex-end; margin-top: 8px;
     }
 
+    /* ── Landscape view ──────────────────────── */
+    #landscape-view { max-width: 860px; }
+
+    .meddicc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .meddicc-item {
+      display: flex; flex-direction: column; gap: 5px;
+    }
+    .meddicc-item.span-2 { grid-column: span 2; }
+    .meddicc-label {
+      display: flex; align-items: center; gap: 8px;
+    }
+    .meddicc-badge {
+      width: 22px; height: 22px; border-radius: 6px;
+      background: #4f46e5; color: #fff;
+      font-size: 0.7rem; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .meddicc-label span {
+      font-size: 0.78rem; font-weight: 600;
+      color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    .meddicc-item textarea {
+      font-size: 0.9rem; padding: 9px 12px;
+      border: 1.5px solid #e5e7eb; border-radius: 8px;
+      outline: none; color: #1a1a2e; font-family: inherit;
+      resize: vertical; min-height: 90px; line-height: 1.6;
+      background: #fff; transition: border-color 0.2s;
+    }
+    .meddicc-item textarea:focus { border-color: #4f46e5; }
+
+    .landscape-table {
+      width: 100%; border-collapse: collapse; font-size: 0.88rem;
+    }
+    .landscape-table th {
+      text-align: left; font-size: 0.72rem; font-weight: 700;
+      color: #9ca3af; text-transform: uppercase; letter-spacing: 0.05em;
+      padding: 0 10px 10px;
+    }
+    .landscape-table td { padding: 5px 6px; }
+    .landscape-table td:last-child { width: 36px; text-align: center; }
+    .landscape-table input, .landscape-table select {
+      width: 100%; font-size: 0.88rem; padding: 7px 10px;
+      border: 1.5px solid #e5e7eb; border-radius: 7px;
+      outline: none; font-family: inherit; background: #fff;
+      transition: border-color 0.2s;
+    }
+    .landscape-table input:focus, .landscape-table select:focus { border-color: #4f46e5; }
+
+    .btn-gong {
+      display: flex; align-items: center; gap: 8px;
+      padding: 12px 28px;
+      background: #4f46e5; color: #fff;
+      font-size: 0.95rem; font-weight: 700;
+      border: none; border-radius: 10px;
+      cursor: pointer; transition: background 0.2s, opacity 0.2s;
+    }
+    .btn-gong:hover:not(:disabled) { background: #4338ca; }
+    .btn-gong:disabled { opacity: 0.55; cursor: not-allowed; }
+
+    .gong-status {
+      font-size: 0.82rem; font-weight: 600; padding: 4px 0;
+    }
+    .gong-status.success { color: #059669; }
+    .gong-status.error   { color: #b91c1c; }
+
     /* ── Export button ───────────────────────── */
     .export-bar {
       display: flex; justify-content: flex-end;
@@ -371,6 +441,11 @@
     <button class="nav-btn" data-view="meeting-prep">
       <i data-lucide="clipboard-list" style="width:20px;height:20px;"></i>
       <span class="tooltip">Meeting Prep</span>
+    </button>
+
+    <button class="nav-btn" data-view="landscape">
+      <i data-lucide="layers" style="width:20px;height:20px;"></i>
+      <span class="tooltip">Landscape</span>
     </button>
 
     <div class="nav-spacer"></div>
@@ -578,6 +653,143 @@
     </div>
 
     <!-- ── Settings view ───────────────────────── -->
+    <!-- ── Landscape view ─────────────────────── -->
+    <div class="view" id="landscape-view">
+      <div class="page-header">
+        <h1>Landscape</h1>
+        <p>Existing vendors, software systems, and opportunity qualification</p>
+      </div>
+
+      <!-- Existing Vendors -->
+      <div class="prep-section">
+        <div class="settings-section-title">Existing Vendors</div>
+        <div class="card prep-card">
+          <div class="attendees-wrap">
+            <table class="landscape-table">
+              <thead>
+                <tr>
+                  <th>Vendor Name</th>
+                  <th>Category</th>
+                  <th>Notes</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="vendors-body"></tbody>
+            </table>
+          </div>
+          <button class="add-row-btn" id="add-vendor-btn">
+            <i data-lucide="plus-circle" style="width:15px;height:15px;"></i> Add Vendor
+          </button>
+        </div>
+      </div>
+
+      <!-- Existing Software Systems -->
+      <div class="prep-section">
+        <div class="settings-section-title">Existing Software Systems</div>
+        <div class="card prep-card">
+          <div class="attendees-wrap">
+            <table class="landscape-table">
+              <thead>
+                <tr>
+                  <th>System Name</th>
+                  <th>Purpose / Category</th>
+                  <th>Notes</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="systems-body"></tbody>
+            </table>
+          </div>
+          <button class="add-row-btn" id="add-system-btn">
+            <i data-lucide="plus-circle" style="width:15px;height:15px;"></i> Add System
+          </button>
+        </div>
+      </div>
+
+      <!-- MEDDICC -->
+      <div class="prep-section">
+        <div class="settings-section-title">MEDDICC Qualification</div>
+        <div class="card prep-card">
+          <div class="meddicc-grid">
+
+            <div class="meddicc-item">
+              <div class="meddicc-label">
+                <div class="meddicc-badge">M</div>
+                <span>Metrics</span>
+              </div>
+              <textarea id="meddicc-metrics" placeholder="What measurable value or ROI does the solution deliver? (e.g. reduce processing time by 30%, save £200k/year)"></textarea>
+            </div>
+
+            <div class="meddicc-item">
+              <div class="meddicc-label">
+                <div class="meddicc-badge">E</div>
+                <span>Economic Buyer</span>
+              </div>
+              <textarea id="meddicc-economic-buyer" placeholder="Who holds the budget and has final sign-off authority?"></textarea>
+            </div>
+
+            <div class="meddicc-item">
+              <div class="meddicc-label">
+                <div class="meddicc-badge">D</div>
+                <span>Decision Criteria</span>
+              </div>
+              <textarea id="meddicc-decision-criteria" placeholder="What criteria will they use to evaluate and select a solution?"></textarea>
+            </div>
+
+            <div class="meddicc-item">
+              <div class="meddicc-label">
+                <div class="meddicc-badge">D</div>
+                <span>Decision Process</span>
+              </div>
+              <textarea id="meddicc-decision-process" placeholder="What are the steps, stakeholders, and timeline for making a decision?"></textarea>
+            </div>
+
+            <div class="meddicc-item span-2">
+              <div class="meddicc-label">
+                <div class="meddicc-badge">I</div>
+                <span>Identify Pain</span>
+              </div>
+              <textarea id="meddicc-pain" placeholder="What are the key pain points, challenges, or triggers driving this project?"></textarea>
+            </div>
+
+            <div class="meddicc-item">
+              <div class="meddicc-label">
+                <div class="meddicc-badge">C</div>
+                <span>Champion</span>
+              </div>
+              <textarea id="meddicc-champion" placeholder="Who internally is sponsoring or advocating for this initiative?"></textarea>
+            </div>
+
+            <div class="meddicc-item">
+              <div class="meddicc-label">
+                <div class="meddicc-badge">C</div>
+                <span>Competition</span>
+              </div>
+              <textarea id="meddicc-competition" placeholder="Who else are they evaluating? What is their current incumbent solution?"></textarea>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Post to Gong -->
+      <div class="prep-section">
+        <div class="card prep-card" style="display:flex; align-items:center; justify-content:space-between; gap:16px;">
+          <div>
+            <div style="font-size:0.92rem; font-weight:700; color:#1a1a2e; margin-bottom:4px;">Post to Gong</div>
+            <div style="font-size:0.82rem; color:#6b7280;">Send all landscape data to Gong. Configure the endpoint and token in Settings.</div>
+          </div>
+          <div style="display:flex; align-items:center; gap:14px; flex-shrink:0;">
+            <span class="gong-status" id="gong-status"></span>
+            <button class="btn-gong" id="post-gong-btn">
+              <i data-lucide="send" style="width:16px;height:16px;"></i> Post to Gong
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
     <div class="view" id="settings-view">
       <div class="page-header">
         <h1>Settings</h1>
@@ -603,6 +815,30 @@
             <div class="settings-actions">
               <button class="btn-secondary" id="ch-apikey-save">Save</button>
               <span class="status-text" id="ch-apikey-status">Saved</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <div class="settings-section-title">Gong Integration</div>
+        <div class="card settings-card">
+          <div class="settings-row">
+            <label for="gong-endpoint-input">Gong API Endpoint</label>
+            <span class="hint">The Gong API URL to POST landscape data to (e.g. https://us-XXXXX.api.gong.io/v2/crm/object-type/objects).</span>
+            <input id="gong-endpoint-input" type="text" placeholder="https://us-XXXXX.api.gong.io/v2/..." autocomplete="off" spellcheck="false" />
+            <div class="settings-actions">
+              <button class="btn-secondary" id="gong-endpoint-save">Save</button>
+              <span class="status-text" id="gong-endpoint-status"></span>
+            </div>
+          </div>
+          <div class="settings-row">
+            <label for="gong-token-input">Gong Access Key</label>
+            <span class="hint">Your Gong access key. This is sent as a Bearer token in the Authorization header.</span>
+            <input id="gong-token-input" type="password" placeholder="Gong access key…" autocomplete="off" spellcheck="false" />
+            <div class="settings-actions">
+              <button class="btn-secondary" id="gong-token-save">Save</button>
+              <span class="status-text" id="gong-token-status"></span>
             </div>
           </div>
         </div>
